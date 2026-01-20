@@ -3,7 +3,7 @@ import { withContentlayer } from 'next-contentlayer2';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
+  turbopack: {},
 };
 
 export default withContentlayer(nextConfig);

@@ -1,0 +1,25 @@
+---
+title: "Sigaweb SAS - Migración y Optimización"
+date: "2025-12-29"
+description: "Migración de arquitectura legacy en CentOS hacia un entorno moderno dockerizado, optimizando costos y facilitando el despliegue continuo."
+image: "/projects/sigaweb-infrastructure.png"
+tags: ["Docker", "Linux", "Nginx", "MySQL", "PHP/Laravel", "CI/CD"]
+published: true
+---
+
+## 🛠️ El Reto Técnico
+El desafío principal consistió en gestionar la infraestructura de los dominios `sigaweb.co` y `sigaweb.com.co`. El sistema corría sobre servidores **CentOS** con configuraciones manuales, lo que dificultaba el escalado y elevaba los costos operativos.
+
+## 🏗️ Solución de Arquitectura
+Implementé una estrategia de **modernización de infraestructura**:
+- **Dockerización:** Empaquetado de la aplicación PHP/Laravel y servicios dependientes en contenedores para garantizar paridad entre entornos.
+- **Reverse Proxy:** Configuración de **Nginx** para gestionar el tráfico de múltiples dominios y certificados SSL.
+- **Migración de SO:** Transición desde CentOS hacia entornos basados en contenedores más ligeros y fáciles de mantener.
+- **Base de Datos:** Optimización de instancias **MySQL** para mejorar los tiempos de respuesta de la plataforma.
+
+## 📈 Resultados e Impacto
+- **Reducción de Costos:** Al dockerizar los servicios, logramos una mejor utilización de los recursos del servidor, reduciendo la factura mensual de infraestructura.
+- **Despliegues Seguros:** Reducción de errores en producción gracias a la estandarización de contenedores.
+- **Soporte Continuo:** Mantenimiento proactivo de los servicios para asegurar la alta disponibilidad de la plataforma para los clientes de Sigaweb SAS.
+
+> "Pasar de configuraciones manuales en servidores físicos a una arquitectura de contenedores nos permitió ganar agilidad y reducir drásticamente los puntos de fallo."

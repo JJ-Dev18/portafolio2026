@@ -1,36 +1,146 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Portafolio Personal - Juan Murillo
 
-## Getting Started
+Portafolio profesional bilingüe construido con Next.js 16, TypeScript, Tailwind CSS y Contentlayer.
 
-First, run the development server:
+## ✨ Características
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- ⚡ **Next.js 16** con App Router
+- 🎨 **Tailwind CSS** para estilos
+- 🌗 **Modo oscuro/claro** con next-themes
+- 📝 **Contentlayer** para gestión de contenido (proyectos y blog)
+- 🎯 **TypeScript** con tipado estricto
+- 🧩 **shadcn/ui** componentes reutilizables
+- 📱 **Diseño responsive**
+- 🔍 **SEO optimizado**
+
+## 📁 Estructura del Proyecto
+
+```
+miportafolio/
+├── app/                    # App Router de Next.js
+│   ├── layout.tsx         # Layout principal con ThemeProvider
+│   ├── page.tsx           # Página de inicio
+│   └── globals.css        # Estilos globales
+├── components/
+│   ├── sections/          # Componentes de secciones
+│   │   ├── header.tsx     # Header con navegación
+│   │   └── hero.tsx       # Sección Hero
+│   └── ui/                # Componentes UI de shadcn/ui
+│       ├── button.tsx
+│       ├── card.tsx
+│       ├── badge.tsx
+│       ├── theme-provider.tsx
+│       └── theme-toggle.tsx
+├── config/
+│   └── site.ts            # Configuración del sitio
+├── content/
+│   ├── projects/          # Contenido de proyectos (.mdx)
+│   └── posts/             # Contenido del blog (.mdx)
+├── lib/
+│   └── utils.ts           # Utilidades (cn helper)
+├── types/
+│   └── index.ts           # Tipos TypeScript
+├── contentlayer.config.ts # Configuración de Contentlayer
+└── tailwind.config.ts     # Configuración de Tailwind
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Inicio Rápido
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Requisitos Previos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js 18+ 
+- npm o pnpm
 
-## Learn More
+### Instalación
 
-To learn more about Next.js, take a look at the following resources:
+1. Clonar el repositorio:
+```bash
+git clone <tu-repo>
+cd miportafolio
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Instalar dependencias:
+```bash
+npm install
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Ejecutar en desarrollo:
+```bash
+npm run dev
+```
 
-## Deploy on Vercel
+4. Abrir [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📝 Agregar Contenido
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Crear un Proyecto
+
+Crea un archivo `.mdx` en `content/projects/`:
+
+```mdx
+---
+title: "Mi Proyecto Increíble"
+description: "Una breve descripción del proyecto"
+date: 2026-01-20
+image: "/images/proyecto.jpg"
+tags: ["Next.js", "TypeScript", "Tailwind"]
+published: true
+---
+
+Contenido del proyecto aquí...
+```
+
+### Crear un Post de Blog
+
+Crea un archivo `.mdx` en `content/posts/`:
+
+```mdx
+---
+title: "Mi Primer Post"
+description: "Una introducción a mi blog"
+date: 2026-01-20
+image: "/images/post.jpg"
+tags: ["Blog", "Tech"]
+published: true
+---
+
+Contenido del post aquí...
+```
+
+## 🎨 Personalización
+
+### Configuración del Sitio
+
+Edita `config/site.ts` para actualizar:
+- Nombre y descripción
+- Enlaces a redes sociales
+- Menú de navegación
+
+### Estilos
+
+El proyecto usa Tailwind CSS con variables CSS personalizadas. Edita `app/globals.css` para cambiar colores y temas.
+
+## 🛠️ Scripts Disponibles
+
+- `npm run dev` - Inicia el servidor de desarrollo
+- `npm run build` - Construye la aplicación para producción
+- `npm run start` - Inicia el servidor de producción
+- `npm run lint` - Ejecuta el linter
+
+## 📦 Tecnologías Utilizadas
+
+- [Next.js 16](https://nextjs.org/) - Framework React
+- [TypeScript](https://www.typescriptlang.org/) - Tipado estático
+- [Tailwind CSS](https://tailwindcss.com/) - Framework CSS
+- [Contentlayer](https://contentlayer.dev/) - Gestión de contenido
+- [shadcn/ui](https://ui.shadcn.com/) - Componentes UI
+- [Lucide React](https://lucide.dev/) - Iconos
+- [next-themes](https://github.com/pacocoursey/next-themes) - Tema oscuro/claro
+
+## 📄 Licencia
+
+MIT
+
+---
+
+Desarrollado con ❤️ por Juan Murillo

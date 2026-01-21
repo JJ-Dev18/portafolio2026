@@ -5,8 +5,8 @@ import { siteConfig } from "@/config/site";
 
 export function Hero() {
   return (
-    <section className="container flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-8 px-4 py-16 md:py-24 lg:py-32">
-      <div className="flex max-w-[980px] flex-col items-center gap-4 text-center">
+    <section className="w-full flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-8 px-4 py-16 md:py-24 lg:py-32">
+      <div className="flex max-w-[980px] flex-col items-center gap-4 text-center mx-auto">
         <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl lg:text-7xl lg:leading-[1.1]">
           Hola, soy{" "}
           <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent dark:from-blue-400 dark:to-cyan-300">

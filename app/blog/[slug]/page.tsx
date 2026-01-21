@@ -7,7 +7,7 @@ import { ArrowLeft, Calendar } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { useMDXComponent } from "next-contentlayer2/hooks";
+import { MDXContent } from "@/components/mdx-content";
 
 interface PostPageProps {
   params: Promise<{
@@ -49,8 +49,6 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post || !post.published) {
     notFound();
   }
-
-  const MDXContent = useMDXComponent(post.body.code);
 
   return (
     <>
@@ -94,7 +92,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {/* Post Content */}
           <div className="prose prose-slate dark:prose-invert max-w-none">
-            <MDXContent />
+            <MDXContent code={post.body.code} />
           </div>
         </article>
       </main>

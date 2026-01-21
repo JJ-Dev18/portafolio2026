@@ -7,7 +7,7 @@ import { ArrowLeft, Calendar } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { useMDXComponent } from "next-contentlayer2/hooks";
+import { MDXContent } from "@/components/mdx-content";
 
 interface ProjectPageProps {
   params: Promise<{
@@ -49,8 +49,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   if (!project || !project.published) {
     notFound();
   }
-
-  const MDXContent = useMDXComponent(project.body.code);
 
   return (
     <>
@@ -94,7 +92,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
           {/* Project Content */}
           <div className="prose prose-slate dark:prose-invert max-w-none">
-            <MDXContent />
+            <MDXContent code={project.body.code} />
           </div>
         </article>
       </main>

@@ -12,6 +12,7 @@ import {
   Workflow,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useTranslations } from "next-intl";
 
 interface Tech {
   name: string;
@@ -89,6 +90,15 @@ const itemVariants = {
 };
 
 export function TechStack() {
+  const t = useTranslations("techStack");
+  
+  const categories = [
+    { key: "frontend", techs: techStack[0].techs },
+    { key: "backend", techs: techStack[1].techs },
+    { key: "databases", techs: techStack[2].techs },
+    { key: "infrastructure", techs: techStack[3].techs },
+  ];
+
   return (
     <section className="w-full py-16 md:py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-4">
@@ -101,19 +111,18 @@ export function TechStack() {
           className="flex flex-col gap-4 text-center mb-12"
         >
           <h2 className="text-3xl font-bold tracking-tighter md:text-4xl lg:text-5xl">
-            Stack Tecnológico
+            {t("title")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-[700px] mx-auto">
-            Tecnologías y herramientas con las que trabajo diariamente para crear
-            soluciones robustas y escalables.
+            {t("description")}
           </p>
         </motion.div>
 
         {/* Tech Categories */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {techStack.map((category, categoryIndex) => (
+          {categories.map((category, categoryIndex) => (
             <motion.div
-              key={category.title}
+              key={category.key}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -121,7 +130,7 @@ export function TechStack() {
               className="flex flex-col gap-4"
             >
               {/* Category Title */}
-              <h3 className="text-xl font-semibold">{category.title}</h3>
+              <h3 className="text-xl font-semibold">{t(`categories.${category.key}`)}</h3>
 
               {/* Tech Grid */}
               <motion.div
@@ -131,7 +140,7 @@ export function TechStack() {
                 viewport={{ once: true }}
                 className="grid gap-4"
               >
-                {category.techs.map((tech, techIndex) => (
+                {category.techs.map((tech) => (
                   <motion.div
                     key={tech.name}
                     variants={itemVariants}
@@ -159,7 +168,7 @@ export function TechStack() {
                             variant="secondary"
                             className="mt-2 text-xs bg-primary/10 text-primary border-primary/20"
                           >
-                            {tech.badge}
+                            {t("badges.enterprise")}
                           </Badge>
                         )}
                       </div>

@@ -1,0 +1,47 @@
+{
+  "navigation": {
+    "home": "Home",
+    "projects": "Projects",
+    "blog": "Blog",
+    "contact": "Contact"
+  },
+  "hero": {
+    "greeting": "Hi, I'm",
+    "role": "Full-Stack Developer & DevOps",
+    "description": "Passionate about creating innovative and scalable web solutions. Specialized in Next.js, React, TypeScript and cloud architecture.",
+    "cta_projects": "View my projects",
+    "cta_contact": "Contact me"
+  },
+  "techStack": {
+    "title": "Tech Stack",
+    "description": "Technologies and tools I work with daily to create robust and scalable solutions.",
+    "categories": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "databases": "Databases",
+      "infrastructure": "Infrastructure & DevOps"
+    },
+    "badges": {
+      "enterprise": "Enterprise Deployment Experience"
+    }
+  },
+  "projects": {
+    "title": "My Projects",
+    "description": "A collection of projects I've worked on, from web applications to infrastructure and DevOps solutions.",
+    "viewProject": "View project",
+    "backToProjects": "Back to projects",
+    "emptyState": "No projects available at the moment."
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "I share my experiences, learnings and reflections on web development, DevOps and technology.",
+    "readMore": "Read more",
+    "backToBlog": "Back to blog",
+    "emptyState": "No posts available at the moment."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "notFound": "Not found"
+  }
+}

@@ -17,7 +17,7 @@ export function Hero() {
       <div className="flex max-w-[980px] flex-col items-center gap-4 text-center mx-auto">
         <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl lg:text-7xl lg:leading-[1.1]">
           {t("greeting")}{" "}
-          <span className="bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-cyan-400 dark:to-purple-400">
+          <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent dark:from-blue-400 dark:to-cyan-300">
             {t("name")}
           </span>
         </h1>

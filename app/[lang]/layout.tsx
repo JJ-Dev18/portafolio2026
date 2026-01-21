@@ -4,7 +4,7 @@ import "../globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { siteConfig } from "@/config/site";
 import { NextIntlClientProvider } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { locales } from "@/i18n/config";
 
@@ -80,10 +80,13 @@ export default async function LocaleLayout({
   // Enable static rendering
   setRequestLocale(lang);
 
+  // Get messages for the current locale
+  const messages = await getMessages();
+
   return (
     <html lang={lang} suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
-        <NextIntlClientProvider locale={lang}>
+        <NextIntlClientProvider messages={messages} locale={lang}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

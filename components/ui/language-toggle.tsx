@@ -20,15 +20,15 @@ export function LanguageToggle() {
   const params = useParams();
   const pathname = usePathname();
   const router = useRouter();
-  const currentLocale = params.locale as string;
+  const currentLang = params.lang as string;
 
-  const switchLanguage = (newLocale: string) => {
-    // Replace the locale in the current pathname
-    const newPathname = pathname.replace(`/${currentLocale}`, `/${newLocale}`);
+  const switchLanguage = (newLang: string) => {
+    // Replace the lang in the current pathname
+    const newPathname = pathname.replace(`/${currentLang}`, `/${newLang}`);
     router.push(newPathname);
   };
 
-  const currentLanguage = languages.find((lang) => lang.code === currentLocale);
+  const currentLanguage = languages.find((lang) => lang.code === currentLang);
 
   return (
     <DropdownMenu>
@@ -43,7 +43,7 @@ export function LanguageToggle() {
           <DropdownMenuItem
             key={language.code}
             onClick={() => switchLanguage(language.code)}
-            className={currentLocale === language.code ? "bg-accent" : ""}
+            className={currentLang === language.code ? "bg-accent" : ""}
           >
             <span className="mr-2">{language.flag}</span>
             {language.name}

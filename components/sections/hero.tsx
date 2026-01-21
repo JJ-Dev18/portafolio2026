@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
 
 export function Hero() {
   const params = useParams();
-  const locale = params.locale as string;
+  const lang = params.lang as string;
   const t = useTranslations("hero");
 
   return (
@@ -31,13 +31,13 @@ export function Hero() {
 
       <div className="flex flex-wrap items-center justify-center gap-4">
         <Button size="lg" asChild>
-          <Link href={`/${locale}/projects`}>
+          <Link href={`/${lang}/projects`}>
             {t("cta_projects")}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
         <Button variant="outline" size="lg" asChild>
-          <Link href={`/${locale}/contact`}>{t("cta_contact")}</Link>
+          <Link href={`/${lang}/contact`}>{t("cta_contact")}</Link>
         </Button>
       </div>
 

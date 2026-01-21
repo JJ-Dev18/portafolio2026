@@ -4,7 +4,7 @@ import "../globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { siteConfig } from "@/config/site";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { locales } from "@/i18n";
 
@@ -59,28 +59,31 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateStaticParams() {
+  return locales.map((lang) => ({ lang }));
+}
+
 export default async function LocaleLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  params: Promise<{ lang: string }>;
 }) {
-  const { locale } = await params;
+  const { lang } = await params;
   
   // Validate locale
-  if (!locales.includes(locale as any)) {
+  if (!locales.includes(lang as any)) {
     notFound();
   }
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
-  const messages = await getMessages();
+  // Enable static rendering
+  setRequestLocale(lang);
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider locale={lang}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

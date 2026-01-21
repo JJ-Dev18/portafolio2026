@@ -1,5 +1,6 @@
 import { Header } from "@/components/sections/header";
 import { Hero } from "@/components/sections/hero";
+import { TechStack } from "@/components/sections/tech-stack";
 
 export default function HomePage() {
   return (
@@ -7,6 +8,7 @@ export default function HomePage() {
       <Header />
       <main>
         <Hero />
+        <TechStack />
       </main>
     </>
   );

@@ -7,17 +7,10 @@ export default createMiddleware({
 
   // Used when no locale matches
   defaultLocale,
-  
-  // Always use a locale prefix
-  localePrefix: "always",
 });
 
 export const config = {
   // Match only internationalized pathnames
-  // Skip Next.js internals and static files
-  matcher: [
-    '/((?!api|_next|_vercel|.*\\..*).*)',
-    '/',
-    '/(es|en)/:path*'
-  ],
+  // Skip Next.js internals and static files, but include all other routes
+  matcher: ['/((?!_next|_vercel|.*\\..*).*)'],
 };

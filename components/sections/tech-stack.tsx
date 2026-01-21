@@ -30,6 +30,7 @@ const techStack: TechCategory[] = [
     techs: [
       { name: "Next.js", icon: <Layers className="h-8 w-8" /> },
       { name: "React", icon: <Code2 className="h-8 w-8" /> },
+      { name: "React Native", icon: <Code2 className="h-8 w-8" /> },
       { name: "TypeScript", icon: <Code2 className="h-8 w-8" /> },
       { name: "Tailwind CSS", icon: <Workflow className="h-8 w-8" /> },
     ],
@@ -37,9 +38,17 @@ const techStack: TechCategory[] = [
   {
     title: "Backend",
     techs: [
+      { name: "Node.js", icon: <Server className="h-8 w-8" /> },
+      { name: "Nest.js", icon: <Layers className="h-8 w-8" /> },
       { name: "PHP (Laravel)", icon: <Server className="h-8 w-8" /> },
       { name: "Python", icon: <Terminal className="h-8 w-8" /> },
+    ],
+  },
+  {
+    title: "Bases de Datos",
+    techs: [
       { name: "MySQL", icon: <Database className="h-8 w-8" /> },
+      { name: "PostgreSQL", icon: <Database className="h-8 w-8" /> },
     ],
   },
   {
@@ -53,7 +62,7 @@ const techStack: TechCategory[] = [
       { name: "Linux (Ubuntu/CentOS)", icon: <Terminal className="h-8 w-8" /> },
       { name: "Nginx", icon: <Server className="h-8 w-8" /> },
       {
-        name: "Azure",
+        name: "Digital Ocean",
         icon: <Cloud className="h-8 w-8" />,
         badge: "Enterprise Deployment Experience",
       },
@@ -76,10 +85,6 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.5,
-      ease: "easeOut",
-    },
   },
 };
 
@@ -105,7 +110,7 @@ export function TechStack() {
         </motion.div>
 
         {/* Tech Categories */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {techStack.map((category, categoryIndex) => (
             <motion.div
               key={category.title}
@@ -130,11 +135,17 @@ export function TechStack() {
                   <motion.div
                     key={tech.name}
                     variants={itemVariants}
+                    transition={{ duration: 0.5 }}
                     whileHover={{ scale: 1.05, y: -5 }}
-                    className="group relative overflow-hidden rounded-lg border bg-background/50 backdrop-blur-sm p-4 transition-all duration-300 hover:shadow-lg hover:border-primary/50"
+                    className="group relative overflow-hidden rounded-xl border border-border/50 bg-background/60 backdrop-blur-md p-4 transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:border-primary/60 dark:bg-background/40 dark:border-border/30 dark:hover:border-primary/70 dark:hover:shadow-primary/20"
                   >
-                    {/* Glassmorphism effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    {/* Inner glow border effect */}
+                    <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                      <div className="absolute inset-0 rounded-xl border-2 border-primary/20 dark:border-primary/40" />
+                    </div>
+
+                    {/* Glassmorphism gradient effect */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:from-primary/20 dark:via-primary/10" />
 
                     {/* Content */}
                     <div className="relative flex items-center gap-3">

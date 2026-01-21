@@ -7,6 +7,7 @@
   },
   "hero": {
     "greeting": "Hi, I'm",
+    "name": "Juan Murillo",
     "role": "Full-Stack Developer & DevOps",
     "description": "Passionate about creating innovative and scalable web solutions. Specialized in Next.js, React, TypeScript and cloud architecture.",
     "cta_projects": "View my projects",

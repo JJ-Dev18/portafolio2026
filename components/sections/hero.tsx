@@ -18,7 +18,7 @@ export function Hero() {
         <h1 className="text-4xl font-bold leading-tight tracking-tighter md:text-6xl lg:text-7xl lg:leading-[1.1]">
           {t("greeting")}{" "}
           <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent dark:from-blue-400 dark:to-cyan-300">
-            Juan Murillo
+            {t("name")}
           </span>
         </h1>
         <h2 className="max-w-[750px] text-xl text-muted-foreground sm:text-2xl md:text-3xl">

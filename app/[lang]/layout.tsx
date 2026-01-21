@@ -6,7 +6,7 @@ import { siteConfig } from "@/config/site";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { locales } from "@/i18n";
+import { locales } from "@/i18n/config";
 
 const inter = Inter({
   subsets: ["latin"],

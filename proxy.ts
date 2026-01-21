@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-
-const locales = ['es', 'en'];
-const defaultLocale = 'es';
+import { locales, defaultLocale } from "@/i18n/config";
 
 function getLocale(request: NextRequest): string {
   // Check if there's a locale in the pathname

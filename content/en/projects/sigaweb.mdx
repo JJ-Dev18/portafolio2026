@@ -1,0 +1,81 @@
+---
+title: "Sigaweb.co - Educational Platform"
+description: "Complete redesign of legacy .NET educational system to modern architecture with React and Laravel, implementing multi-tenancy and intelligent assistant."
+date: 2026-01-10
+image: "/projects/sigaweb-platform.png"
+tags: ["React 18", "TypeScript", "Laravel", "Material-UI", "Redux Toolkit", "Multi-Tenant", "Docker", "OData"]
+published: true
+projectUrl: "https://sigaweb.co"
+---
+
+## Overview
+
+**Sigaweb.co** is a comprehensive educational platform for academic and institutional management. This project is the **second version** of the product: a migration from a legacy .NET system to a modern, scalable architecture with **React + TypeScript** on the frontend and **Laravel** on the backend.
+
+It covers the full academic lifecycle: enrollment and registration, grades, attendance, document workflows (PDF/Excel), surveys and voting, promotion and promotion committee, pagination/folio, ID cards and certificates. It also includes an **AI-powered intelligent assistant** and a multi-tenant design prepared to serve multiple institutions on a single platform.
+
+---
+
+## The Problem
+
+The previous .NET-based version was increasingly hard to evolve, and the user experience had clear limitations, especially around responsiveness and usability. Over time, this meant more friction for students, teachers, and administrators, higher maintenance cost, and slower delivery of new features.
+
+---
+
+## The Solution
+
+We delivered a complete redesign focused on scalability, clarity, and process automation. The system runs as a **multi-tenant** platform, includes **contextual AI assistance** by role and in-app location, and streamlines critical flows like enrollment, grading sheets, reporting, and institutional communications. Security and access control were reinforced with role-based permissions and robust form validation, using JWT/Firebase-based authentication where appropriate.
+
+---
+
+## Technical Architecture
+
+### Frontend - React TypeScript
+
+The frontend is built with **React 18.2.0** and **TypeScript 5.3.3**, bundled with **Vite 5**. UI is implemented with **Material-UI (MUI) 5.15** and **Tailwind CSS**, leveraging the **Fuse React** template to accelerate layout and component development.
+
+State is managed with **Redux Toolkit 2.0**, routing with **React Router 6**, and forms with **React Hook Form** complemented by **Yup** and **Zod** validation. For complex data views and exports, the project integrates AG Grid, Syncfusion, and MUI Data Grid, plus Framer Motion animations and i18next internationalization. Key integrations include Firebase (auth), Axios (HTTP), and Cloudinary for media management.
+
+### Backend - Laravel Multi-Tenant
+
+The backend is a **Laravel** API designed as a **multi-tenant** platform, with advanced querying supported via **OData**. Core modules include enrollment/student management, grading sheets (six grading models), attendance tracking, anecdotal records, document generation (PDF via mPDF and Excel exports), surveys and voting, promotion workflows and promotion committee, pagination/folio, ID cards and certificates, and the intelligent assistant capabilities.
+
+The infrastructure is prepared for dockerized operations and server deployment, using Cloudinary to support storage and media workflows.
+
+---
+
+## Roles and Features
+
+### 👨‍🎓 Student
+Students can complete enrollment and registration, view academic dashboards, download key documents (certificates, transcripts, report cards), and access courses and subjects through the Academy module.
+
+### 👨‍🏫 Teacher
+Teachers work with grading sheets across multiple models (quantitative, qualitative, competencies, performance, thematic axis, indicators), manage attendance, publish assignments and posts, and handle course management within Academy.
+
+### 👨‍💼 Administrator
+Administrators get institutional dashboards, student/enrollment management, pre-enrollment flows, announcements, and reports exportable to Excel and PDF.
+
+### 👨‍💻 Super Administrator
+Super administrators configure global parameters (terms, levels, schedules, periods), manage the academic structure (grades, groups, areas, subjects), handle teacher assignments, configure grading models, and administer the intelligent assistant panel.
+
+---
+
+## My Role
+
+As a Full-Stack Developer, I led architecture and delivery: building the React + TypeScript frontend, integrating with the Laravel multi-tenant API, implementing grading models, reports and exports, and preparing the environment for deployment (Docker + server). I also supported adoption through end-user training and rollout guidance.
+
+---
+
+## Impact
+
+Sigaweb.co runs in **active production** serving multiple institutions and reducing operational cost via the multi-tenant approach. The UX improved with a modern responsive interface, and critical academic processes were automated, increasing productivity for teachers and administrative teams.
+
+---
+
+## What This Project Demonstrates
+
+This project demonstrates a legacy-to-modern migration, strong React/TypeScript/Laravel execution, multi-tenant system design, complex state management, cloud integrations, production deployment practices, and real-world adoption support.
+
+---
+
+> Sigaweb.co demonstrates my ability to **replace legacy systems**, design scalable architectures, and deliver solutions that generate real value for educational institutions.

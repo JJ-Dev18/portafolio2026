@@ -1,0 +1,81 @@
+---
+title: "Sigaweb.co - Plataforma Educativa"
+description: "Rediseño completo de sistema educativo legacy .NET a arquitectura moderna con React y Laravel, implementando multi-tenancy y asistente inteligente."
+date: 2026-01-10
+image: "/projects/sigaweb-platform.png"
+tags: ["React 18", "TypeScript", "Laravel", "Material-UI", "Redux Toolkit", "Multi-Tenant", "Docker", "OData"]
+published: true
+projectUrl: "https://sigaweb.co"
+---
+
+## Overview
+
+**Sigaweb.co** es una plataforma educativa integral para gestión académica e institucional. Este proyecto representa la **segunda versión** del sistema: una migración desde un producto legacy en .NET hacia una arquitectura moderna y escalable con **React + TypeScript** en el frontend y **Laravel** en el backend.
+
+La solución cubre el ciclo completo: inscripción, matrícula, calificaciones, asistencia, gestión documental (PDF/Excel), encuestas y votaciones, promoción y comité de promoción, foliación, carnets y certificados. Además, integra un **asistente inteligente con IA** y un diseño multi-tenant preparado para operar múltiples instituciones con una sola base tecnológica.
+
+---
+
+## El Problema
+
+La versión anterior, basada en .NET, tenía una arquitectura difícil de evolucionar y un frontend con limitaciones claras de UX y responsive. Con el tiempo, esto se traducía en mayor fricción para estudiantes, docentes y administrativos, además de costos más altos de mantenimiento y poca velocidad para entregar nuevas funcionalidades.
+
+---
+
+## La Solución
+
+Se realizó un rediseño completo, priorizando escalabilidad, claridad de interfaz y automatización de procesos. El sistema opera como **multi-tenant**, integra **asistencia contextual con IA** por rol y ubicación, y ofrece flujos optimizados para tareas críticas como matrícula, planillas, reportes y comunicación institucional. También se fortaleció seguridad y control de acceso por roles, con validación robusta de formularios y autenticación basada en JWT/Firebase.
+
+---
+
+## Arquitectura Técnica
+
+### Frontend - React TypeScript
+
+El frontend está desarrollado con **React 18.2.0** y **TypeScript 5.3.3**, compilado con **Vite 5**. Para UI se utiliza **Material-UI (MUI) 5.15** y **Tailwind CSS**, basándose en el template **Fuse React** para acelerar la construcción de layouts y componentes.
+
+El estado se maneja con **Redux Toolkit 2.0**, la navegación con **React Router 6**, y los formularios con **React Hook Form**, complementado con validación mediante **Yup** y **Zod**. Para grillas y reportes se integran herramientas como AG Grid, Syncfusion y MUI Data Grid, además de animaciones con Framer Motion e internacionalización con i18next. En integraciones, se utiliza Firebase (auth), Axios (HTTP) y Cloudinary para recursos multimedia.
+
+### Backend - Laravel Multi-Tenant
+
+El backend es una API en **Laravel** diseñada como plataforma **multi-tenant**, con soporte de consultas avanzadas mediante **OData**. La API cubre módulos como matrícula, planillas, notas, asistencia, anecdotario, generación de documentos (PDF con mPDF y exportación a Excel), encuestas y votaciones, promoción y comité de promoción, foliación, carnets y certificados, además del panel y capacidades del asistente inteligente con IA.
+
+La infraestructura está preparada para operación dockerizada y despliegue en servidor, con Cloudinary como soporte para almacenamiento/gestión de archivos y medios.
+
+---
+
+## Roles y Funcionalidades
+
+### 👨‍🎓 Estudiante
+El estudiante puede completar inscripción y matrícula, consultar su dashboard académico y descargar documentación clave (certificados, constancias, boletines). También accede a cursos y asignaturas a través del módulo tipo “Academy”.
+
+### 👨‍🏫 Docente
+El docente dispone de planillas de evaluación con múltiples modelos (cuantitativo, cualitativo, competencias, desempeños, eje temático e indicadores), control de asistencias, publicaciones y tareas, y la gestión de cursos dentro del entorno Academy.
+
+### 👨‍💼 Administrador
+El administrador cuenta con paneles de estadísticas, gestión de estudiantes e inscripciones, flujos de pre-inscripción, comunicados institucionales y reportes exportables a Excel y PDF.
+
+### 👨‍💻 Super Administrador
+El super administrador configura parámetros globales (vigencias, niveles, jornadas, períodos), administra la estructura académica (grados, grupos, áreas, asignaturas), gestiona docentes/asignaciones, define modelos de evaluación y controla el panel administrativo del asistente inteligente.
+
+---
+
+## Mi Rol
+
+Como Full-Stack Developer lideré la arquitectura y la entrega del producto: desarrollo del frontend en React + TypeScript, integración con la API Laravel multi-tenant, implementación de modelos de evaluación, reportes y exportaciones, y preparación del entorno para despliegue (Docker + servidor). También participé en la adopción del sistema mediante capacitación y acompañamiento a usuarios finales.
+
+---
+
+## Impacto
+
+Sigaweb.co opera en **producción activa** atendiendo múltiples instituciones y reduciendo costos operativos gracias al enfoque multi-tenant. La experiencia de usuario mejoró con una interfaz moderna y responsive, y se automatizaron procesos académicos críticos, elevando productividad de docentes y equipos administrativos.
+
+---
+
+## Lo que Este Proyecto Demuestra
+
+Este proyecto evidencia migración de sistemas legacy a una arquitectura moderna, dominio de React/TypeScript/Laravel, diseño multi-tenant, manejo de estados complejos, integración de servicios cloud y despliegue en producción, además de experiencia en adopción y capacitación de usuarios.
+
+---
+
+> Sigaweb.co demuestra mi capacidad para **reemplazar sistemas legacy**, diseñar arquitecturas escalables y entregar soluciones que generan valor real para instituciones educativas.

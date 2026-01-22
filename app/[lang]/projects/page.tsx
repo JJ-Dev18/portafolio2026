@@ -59,7 +59,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ lang:
                       ))}
                     </div>
                   </CardContent>
-                  <CardFooter>
+                  <CardFooter className="flex flex-col gap-2">
                     <Link 
                       href={project.url}
                       className="group inline-flex w-full items-center justify-center gap-2 rounded-lg border-2 border-blue-600 bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:shadow-blue-600/30 dark:border-blue-500 dark:bg-blue-500 dark:hover:bg-blue-600 dark:hover:border-blue-600 dark:hover:shadow-blue-500/30"
@@ -67,6 +67,13 @@ export default async function ProjectsPage({ params }: { params: Promise<{ lang:
                       {t("viewProject")}
                       <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </Link>
+                    {project.projectUrl && (
+                      <Button asChild variant="outline" className="w-full">
+                        <a href={project.projectUrl} target="_blank" rel="noopener noreferrer">
+                          {t("visitSite")}
+                        </a>
+                      </Button>
+                    )}
                   </CardFooter>
                 </Card>
               ))}

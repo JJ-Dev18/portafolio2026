@@ -1,0 +1,49 @@
+---
+title: "Voopy – Memberships, Benefits, and Real-Time Validation"
+description: "Membership ecosystem with backoffice and partner-store validation: NestJS API with PostgreSQL and a Next.js web frontend."
+date: 2025-08-01
+image: "/projects/voopy.png"
+tags: ["NestJS", "TypeScript", "PostgreSQL", "TypeORM", "Swagger", "Docker", "Next.js", "shadcn/ui", "Wompi"]
+published: true
+projectUrl: "https://voopy.vercel.app/"
+frontendRepoUrl: "https://github.com/JJ-Dev18/voopy"
+backendRepoUrl: "https://github.com/JJ-Dev18/api-voopy"
+backendOnline: false
+---
+
+## Overview
+
+**Voopy** is a membership-and-benefits ecosystem designed to operate on two fronts: a **backoffice** to manage users, plans, partner stores, and benefit usage; and a **real-time integration layer** that allows partner stores to validate active memberships by national ID and record benefit consumption with full traceability.
+
+The solution is composed of a **REST API** built with NestJS (TypeScript) and a **web application** built with Next.js (App Router) that structures dashboards by role (customer, store, and superadmin). The goal is to keep data consistent, permissions clear, and operations smooth for both end users and partner stores.
+
+---
+
+## What it solves
+
+From a business perspective, Voopy centralizes **user management** (including ID-based search), **plan** and benefit definition, **membership lifecycle** management (create, update, list), and **active membership validation** for stores. It also supports partner **store management** via API keys, **benefit consumption** tracking for auditing and statistics, and **seeders** to populate test data.
+
+---
+
+## Backend – API (NestJS / PostgreSQL)
+
+The API is built with **NestJS** and **TypeScript**, uses **PostgreSQL** with **TypeORM**, and exposes interactive documentation via **Swagger**. Security combines **JWT Bearer** for backoffice/authenticated endpoints and an **API key** (`x-api-key` header) for store integrations, with role-based access (e.g., `SUPERADMIN`, `STORE`) enforced through guards.
+
+Core modules include authentication, users, plans, memberships, stores, benefits, and benefit consumption. The API includes endpoints for real-time membership validation by ID for stores, API key regeneration, and seed routes (including a dev-only variant).
+
+---
+
+## Frontend – Web (Next.js / App Router)
+
+The web app is built with **Next.js (App Router)** and **TypeScript**, following a modern segmented structure: public routes, auth routes, and a role-based dashboard. UI is implemented with reusable **shadcn/ui-style** components, section layouts, and role-specific headers/sidebars/modals for admin/customer/store experiences.
+
+Data access is organized through an API service layer (auth, users, stores, plans, memberships, benefits, transactions), with global state for authentication and administrative modules. The project also includes a payments flow integrated with **Wompi** to handle membership purchases or renewals.
+
+---
+
+## Operations and Dev Experience
+
+The project is prepared for local execution and deployment with **Docker**, using `docker-compose` to run PostgreSQL and pgAdmin. Swagger docs live at `/api/docs`, the port can be configured via `process.env.PORT`, and database connectivity is handled through environment variables (`DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`).
+
+> Note: the **backend is not publicly deployed** at the moment; the repository is available for review and local execution.
+

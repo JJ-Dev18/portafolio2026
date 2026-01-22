@@ -76,6 +76,34 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               {project.title}
             </h1>
             <p className="text-xl text-muted-foreground">{project.description}</p>
+
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+              {project.projectUrl && (
+                <Button asChild>
+                  <a href={project.projectUrl} target="_blank" rel="noopener noreferrer">
+                    {t("visitSite")}
+                  </a>
+                </Button>
+              )}
+              {project.frontendRepoUrl && (
+                <Button asChild variant="outline">
+                  <a href={project.frontendRepoUrl} target="_blank" rel="noopener noreferrer">
+                    {t("frontendRepo")}
+                  </a>
+                </Button>
+              )}
+              {project.backendRepoUrl && (
+                <Button asChild variant="outline">
+                  <a href={project.backendRepoUrl} target="_blank" rel="noopener noreferrer">
+                    {t("backendRepo")}
+                  </a>
+                </Button>
+              )}
+            </div>
+
+            {project.backendOnline === false && project.backendRepoUrl && (
+              <p className="text-sm text-muted-foreground">{t("backendOffline")}</p>
+            )}
             
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">

@@ -1,0 +1,53 @@
+---
+title: "Fleed Shop – Módulo E-commerce (UK)"
+description: "Módulo de tienda/e-commerce en Next.js + TypeScript con catálogo, carrito/checkout, suscripciones y panel admin, integrado con Stripe y PostgreSQL."
+date: 2023-08-01
+image: "/projects/fleed-shop.png"
+tags: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "NextAuth", "Prisma", "Knex", "Tailwind CSS", "Material UI", "i18n"]
+published: true
+projectUrl: "https://collective-group.vercel.app/"
+frontendRepoUrl: "https://github.com/JJ-Dev18/collectiveGroup"
+backendOnline: true
+---
+
+## Overview
+
+**Fleed Shop** fue un módulo de tienda/e-commerce desarrollado para una empresa de Inglaterra. El objetivo era entregar una base sólida para vender productos y gestionar suscripciones (paquetes) con un flujo de compra moderno, panel de administración y pagos integrados.
+
+El proyecto se alcanzó a implementar funcionalmente, pero **no continuó** por temas de acuerdos sobre costos de mantenimiento y soporte a largo plazo.
+
+---
+
+## Qué incluye
+
+La tienda incluye un **catálogo de productos**, carrito y checkout, además de un flujo de **suscripciones** por paquetes. La interfaz se construyó con **Material UI** y **Tailwind CSS**, incluyendo animaciones con Framer Motion y componentes reutilizables organizados por módulos (shopping cart, suscripciones y administración).
+
+En administración, se incluyeron vistas y endpoints protegidos para gestionar entidades clave (productos, paquetes, ventas y suscripciones), restringiendo el acceso únicamente a usuarios con rol **ADMIN**.
+
+---
+
+## Autenticación, roles e i18n
+
+Para autenticación se implementó **NextAuth**, con soporte de Google OAuth y credenciales (email/password). El sistema maneja roles como **USER** y **ADMIN** para controlar el acceso al panel y rutas sensibles.
+
+También se integró internacionalización con **next-i18next** para trabajar en varios idiomas (es/en), de forma coherente con el resto de la UI.
+
+---
+
+## Datos y persistencia
+
+La base de datos está sobre **PostgreSQL** (con Docker para desarrollo). Se utilizaron **Prisma** para el modelado de entidades principales y **Knex** para migraciones y seeds, permitiendo inicializar entornos y datos de prueba de forma predecible.
+
+---
+
+## Pagos y suscripciones (Stripe)
+
+El módulo integra **Stripe** para checkout y suscripciones. Los paquetes se conectan con productos/precios configurados en Stripe, apoyándose en metadata para mapear nombres y reglas del negocio (incluyendo restricciones específicas para un paquete personalizado).
+
+---
+
+## Links
+
+- **Sitio (demo/preview)**: `https://collective-group.vercel.app/`
+- **Repositorio**: `https://github.com/JJ-Dev18/collectiveGroup`
+

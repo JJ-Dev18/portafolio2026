@@ -1,25 +1,23 @@
 ---
 title: "Sigaweb SAS - Migration and Optimization"
 description: "Migration from legacy CentOS architecture to a modern dockerized environment, optimizing costs and enabling continuous deployment."
-date: 2025-12-29
+date: 2023-01-15
 image: "/projects/sigaweb-infrastructure.png"
 tags: ["Docker", "Linux", "Nginx", "MySQL", "PHP/Laravel", "CI/CD"]
 published: true
 ---
 
 ## 🛠️ The Technical Challenge
-The main challenge was managing the infrastructure for the domains `sigaweb.co` and `sigaweb.com.co`. The system ran on **CentOS** servers with manual configurations, which made scaling difficult and increased operational costs.
+The main challenge was stabilizing and modernizing the infrastructure for `sigaweb.co` and `sigaweb.com.co`. The system ran on **CentOS** with manual, tightly-coupled configurations, which made scaling harder, increased operational risk, and raised maintenance costs.
 
 ## 🏗️ Architecture Solution
-I implemented an **infrastructure modernization** strategy:
-- **Dockerization:** Packaging the PHP/Laravel application and dependent services in containers to ensure environment parity.
-- **Reverse Proxy:** **Nginx** configuration to manage traffic from multiple domains and SSL certificates.
-- **OS Migration:** Transition from CentOS to lighter, easier-to-maintain container-based environments.
-- **Database:** Optimization of **MySQL** instances to improve platform response times.
+I executed an **infrastructure modernization** plan focused on standardization and reliability. The PHP/Laravel application and its dependencies were dockerized to ensure environment parity and repeatable deployments. At the edge, **Nginx** was configured as a reverse proxy to handle multi-domain traffic and SSL certificates in a centralized, maintainable way.
+
+As part of the transition away from “manual server setups”, operations moved toward lighter, easier-to-maintain container-based environments, and **MySQL** instances were tuned to improve performance and stability under load.
 
 ## 📈 Results and Impact
-- **Cost Reduction:** By dockerizing services, we achieved better server resource utilization, reducing monthly infrastructure costs.
-- **Safe Deployments:** Reduction of production errors thanks to container standardization.
-- **Continuous Support:** Proactive service maintenance to ensure high availability of the platform for Sigaweb SAS clients.
+The shift to dockerized services improved server resource utilization and delivered **cost reductions** in monthly infrastructure spend. Container standardization reduced production errors and enabled safer, more predictable deployments.
+
+In addition, proactive maintenance routines were introduced to sustain high availability and reduce incident frequency for Sigaweb SAS clients.
 
 > "Moving from manual configurations on physical servers to a container architecture allowed us to gain agility and drastically reduce failure points."

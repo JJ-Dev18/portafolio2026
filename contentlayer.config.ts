@@ -35,6 +35,27 @@ export const Project = defineDocumentType(() => ({
       type: 'boolean',
       default: true,
     },
+    projectUrl: {
+      type: 'string',
+      description: 'URL del proyecto en producción',
+      required: false,
+    },
+    frontendRepoUrl: {
+      type: 'string',
+      description: 'URL del repositorio del frontend',
+      required: false,
+    },
+    backendRepoUrl: {
+      type: 'string',
+      description: 'URL del repositorio del backend',
+      required: false,
+    },
+    backendOnline: {
+      type: 'boolean',
+      description: 'Indica si el backend está desplegado públicamente',
+      required: false,
+      default: false,
+    },
   },
   computedFields: {
     locale: {

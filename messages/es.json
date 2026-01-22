@@ -30,6 +30,10 @@
     "title": "Mis Proyectos",
     "description": "Una colección de proyectos en los que he trabajado, desde aplicaciones web hasta soluciones de infraestructura y DevOps.",
     "viewProject": "Ver proyecto",
+    "visitSite": "Visitar sitio",
+    "frontendRepo": "Repo frontend",
+    "backendRepo": "Repo backend",
+    "backendOffline": "Backend: actualmente no está en línea.",
     "backToProjects": "Volver a proyectos",
     "emptyState": "No hay proyectos disponibles en este momento."
   },

@@ -1,89 +1,63 @@
 ---
 title: "UFT – Ultimate Frisbee Tournament Platform"
 description: "Plataforma full-stack para gestionar, puntuar y rastrear torneos de Ultimate Frisbee en tiempo real, con estadísticas en vivo y panel de administración."
-date: 2024-01-01
+date: 2026-01-20
 image: "/projects/uft-platform.png"
 tags: ["React 18", "NestJS", "React Native", "TypeScript", "Docker", "Nginx", "PostgreSQL", "VPS", "DevOps"]
 published: true
+projectUrl: "https://uftracker.com"
 ---
 
 ## Overview
 
-**UFT** es una plataforma full-stack diseñada para **gestionar, puntuar y rastrear torneos de Ultimate Frisbee en tiempo real**.
+**UFT** es una plataforma full-stack diseñada para **gestionar, puntuar y rastrear torneos de Ultimate Frisbee en tiempo real**. Nace para unificar en un solo lugar la administración del torneo, el marcador en vivo y las estadísticas de equipos y jugadores, con una experiencia clara tanto para organizadores como para quienes siguen los partidos.
 
-Combina **estadísticas en vivo**, **administración de torneos** y **experiencias para fanáticos** en un único ecosistema utilizado por clubes, ligas y entrenadores.
+En producción, UFT permite operar torneos con múltiples partidos concurrentes, manteniendo consistencia en datos y visibilidad inmediata del estado del evento.
 
 ---
 
 ## El Problema
 
-Los torneos de Ultimate Frisbee a menudo dependen de:
-- Registro manual de puntajes
-- Estadísticas retrasadas
-- Herramientas fragmentadas (hojas de cálculo, WhatsApp, PDFs)
+En muchos torneos, el scorekeeping y el reporte de estadísticas se hacen de forma manual o con herramientas fragmentadas (hojas de cálculo, WhatsApp y PDFs). Eso provoca retrasos, inconsistencias y poca trazabilidad: los datos llegan tarde, se duplican o se pierden, y la experiencia para el público se queda corta.
 
-Esto conduce a **datos de baja calidad**, **reportes lentos** y **participación limitada de los fanáticos**.
+El resultado es **baja calidad de datos**, **reportes lentos** y **limitada participación de fanáticos**, además de fricción operativa para quienes organizan.
 
 ---
 
 ## La Solución
 
-UFT proporciona:
-- 🟢 **Seguimiento de puntajes en tiempo real**
-- 📊 **Estadísticas en vivo de jugadores y equipos**
-- 🏆 **Panel de gestión de torneos**
-- 📱 **Aplicación móvil para espectadores (en progreso)**
-- 📸 **Cobertura integrada de medios y eventos**
+UFT centraliza la operación del torneo con **seguimiento de puntajes en tiempo real**, **estadísticas en vivo** por jugador y equipo, y un **dashboard** para gestión administrativa. Además, contempla una experiencia para espectadores (app móvil en progreso) y módulos para cobertura y contenido del evento, orientados a aumentar engagement y visibilidad.
 
 ---
 
 ## Arquitectura Técnica
 
 ### Frontend
-- **React 18** para paneles administrativos y públicos
-- **React Native + TypeScript** para la aplicación móvil de espectadores
-- Tailwind CSS + shadcn/ui
+El frontend se construyó con **React 18** para los paneles administrativos y públicos. En paralelo, la app de espectadores se desarrolla con **React Native + TypeScript**. La UI se apoya en Tailwind CSS y shadcn/ui para mantener consistencia visual y velocidad de iteración.
 
 ### Backend
-- **NestJS** como framework principal del backend
-- API RESTful
-- PostgreSQL como base de datos
+El backend está implementado con **NestJS**, exponiendo una API REST y persistiendo datos en **PostgreSQL** para asegurar integridad y consultas confiables en escenarios de concurrencia.
 
 ### Infraestructura
-- Servicios dockerizados
-- Nginx como reverse proxy
-- Desplegado en VPS (DigitalOcean)
-- SSL + aislamiento de entornos
-- Respaldos manuales y automatizados
+La plataforma corre en servicios **dockerizados**, con **Nginx** como reverse proxy y despliegue en VPS (DigitalOcean). Se configuró SSL, separación de entornos y una estrategia de backups manual y automatizada para operación segura en producción.
 
 ---
 
 ## Mi Rol
 
-Lideré el proyecto de principio a fin:
-- Diseño de producto y decisiones de UX
-- Desarrollo frontend y backend
-- Configuración de infraestructura y despliegues
-- Optimización de rendimiento
-- Operaciones en torneos reales
+Lideré el proyecto de principio a fin, desde el diseño de producto y decisiones de UX, hasta el desarrollo full-stack, la configuración de infraestructura, los despliegues y la optimización de rendimiento. También participé en la operación en torneos reales para validar flujo, confiabilidad y velocidad de ejecución.
 
 ---
 
 ## Impacto
 
-- Utilizado en **múltiples torneos**
-- Soporta **partidos en vivo y juegos concurrentes**
-- Mejora de la velocidad operativa para organizadores
-- Creación de una base para un producto deportivo-tecnológico escalable
+UFT ya ha sido utilizado en **múltiples torneos** y soporta **partidos en vivo y juegos concurrentes**, mejorando la velocidad operativa para organizadores. Además, sienta las bases para evolucionar hacia un producto sports-tech escalable con métricas confiables y experiencia de fan mejorada.
 
 ---
 
 ## Lo que Este Proyecto Demuestra
 
-✔ Arquitectura full-stack  
-✔ DevOps y despliegues en producción  
-✔ Usuarios reales y tráfico real  
-✔ Pensamiento de producto, no solo código  
+Este proyecto muestra mi capacidad para diseñar arquitectura full-stack, llevarla a producción con prácticas de DevOps, operar con usuarios reales y tomar decisiones de producto basadas en necesidades del mundo real, no solo en implementación técnica.
 
 ---
 

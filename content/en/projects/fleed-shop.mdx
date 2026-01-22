@@ -1,0 +1,53 @@
+---
+title: "Fleed Shop – E-commerce Module (UK)"
+description: "E-commerce module built with Next.js + TypeScript including catalog, cart/checkout, subscriptions, and admin panel, integrated with Stripe and PostgreSQL."
+date: 2023-08-01
+image: "/projects/fleed-shop.png"
+tags: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "NextAuth", "Prisma", "Knex", "Tailwind CSS", "Material UI", "i18n"]
+published: true
+projectUrl: "https://collective-group.vercel.app/"
+frontendRepoUrl: "https://github.com/JJ-Dev18/collectiveGroup"
+backendOnline: true
+---
+
+## Overview
+
+**Fleed Shop** was an e-commerce/shop module developed for a UK company. The goal was to deliver a solid foundation to sell products and manage subscription packages with a modern purchase flow, an administration panel, and integrated payments.
+
+The project reached a functional implementation, but it **did not continue** due to disagreements around long-term maintenance and support costs.
+
+---
+
+## What it includes
+
+The shop includes a **product catalog**, cart and checkout, plus a **subscription** flow based on packages. The UI was built with **Material UI** and **Tailwind CSS**, including animations via Framer Motion and reusable components organized by domain (shopping cart, subscriptions, and administration).
+
+On the admin side, protected views and API routes were implemented to manage key entities (products, packages, sales, and subscriptions), restricting access to **ADMIN** users only.
+
+---
+
+## Auth, roles, and i18n
+
+Authentication was implemented with **NextAuth**, supporting Google OAuth and credentials (email/password). The system uses roles such as **USER** and **ADMIN** to protect the admin panel and sensitive routes.
+
+Internationalization was also added through **next-i18next** (es/en), keeping the UI consistent across languages.
+
+---
+
+## Data and persistence
+
+The database runs on **PostgreSQL** (Dockerized for development). **Prisma** was used for modeling core entities, while **Knex** handled migrations and seeds to bootstrap environments and test data reliably.
+
+---
+
+## Payments and subscriptions (Stripe)
+
+The module integrates **Stripe** for checkout and subscriptions. Packages are mapped to Stripe products/prices, leveraging metadata for business rules (including specific constraints for a custom package).
+
+---
+
+## Links
+
+- **Site (demo/preview)**: `https://collective-group.vercel.app/`
+- **Repository**: `https://github.com/JJ-Dev18/collectiveGroup`
+

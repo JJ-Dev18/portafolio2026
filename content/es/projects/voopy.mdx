@@ -1,0 +1,49 @@
+---
+title: "Voopy – Membresías, Beneficios y Validación en Tiempo Real"
+description: "Ecosistema de membresías con backoffice y validación en tiendas aliadas: API en NestJS con PostgreSQL y frontend web en Next.js."
+date: 2025-08-01
+image: "/projects/voopy.png"
+tags: ["NestJS", "TypeScript", "PostgreSQL", "TypeORM", "Swagger", "Docker", "Next.js", "shadcn/ui", "Wompi"]
+published: true
+projectUrl: "https://voopy.vercel.app/"
+frontendRepoUrl: "https://github.com/JJ-Dev18/voopy"
+backendRepoUrl: "https://github.com/JJ-Dev18/api-voopy"
+backendOnline: false
+---
+
+## Overview
+
+**Voopy** es un ecosistema para gestionar membresías y beneficios, pensado para operar en dos frentes: un **backoffice** para administrar usuarios, planes, tiendas aliadas y consumos; y una capa de **integración en tiempo real** para que comercios aliados validen membresías activas por cédula y registren el consumo de beneficios con trazabilidad.
+
+La solución se compone de una **API REST** en NestJS (TypeScript) y una **aplicación web** en Next.js (App Router) que organiza el dashboard por roles (cliente, tienda y superadmin). El objetivo es tener datos consistentes, control de permisos y una operación fluida tanto para usuarios finales como para comercios aliados.
+
+---
+
+## Qué resuelve
+
+A nivel de negocio, Voopy centraliza la gestión de **usuarios** (incluyendo búsqueda por cédula), la definición de **planes** y beneficios asociados, el manejo del ciclo de vida de **membresías** (crear, actualizar, listar) y su **validación activa** para tiendas. Además, permite administrar **tiendas aliadas** mediante API Keys, registrar y consultar **consumos de beneficios** para auditoría y estadísticas, y ejecutar **seeders** para poblar datos de prueba.
+
+---
+
+## Backend – API (NestJS / PostgreSQL)
+
+La API está construida en **NestJS** con **TypeScript**, usa **PostgreSQL** con **TypeORM** y publica documentación interactiva con **Swagger**. Para seguridad, combina **JWT Bearer** en endpoints de backoffice/usuarios autenticados y **API Key** por header `x-api-key` para integraciones de tiendas, soportando roles (por ejemplo, `SUPERADMIN` y `TIENDA`) mediante guards.
+
+La API expone módulos clave como autenticación, usuarios, planes, membresías, tiendas, beneficios y consumos. Incluye endpoints para validación de membresía activa por cédula desde tiendas, regeneración de API Keys y rutas de seeds para poblar datos (con una variante restringida a entorno dev).
+
+---
+
+## Frontend – Web (Next.js / App Router)
+
+La web está desarrollada con **Next.js (App Router)** y **TypeScript**, con una estructura moderna por segmentos: rutas públicas, rutas de autenticación y un dashboard modular por rol. En UI se apoya en componentes reutilizables estilo **shadcn/ui**, con layouts por secciones, sidebars y modales específicos para admin/cliente/tienda.
+
+La capa de datos se organiza en servicios (auth, usuarios, tiendas, planes, membresías, beneficios y transacciones), con estado global para autenticación y módulos administrativos. El proyecto también incluye un flujo de pagos integrado con **Wompi** para gestionar renovaciones o compras vinculadas a membresías.
+
+---
+
+## Enfoque de Operación y Dev Experience
+
+El proyecto está preparado para ejecución local y despliegue con **Docker**, levantando PostgreSQL y herramientas de administración (pgAdmin) vía `docker-compose`. La documentación Swagger vive en `/api/docs` y el puerto puede configurarse por `process.env.PORT`. La conexión a base de datos se maneja por variables de entorno (`DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`).
+
+> Nota: actualmente el **backend no está desplegado públicamente**; el repositorio está disponible para revisión y ejecución local.
+

@@ -1,9 +1,9 @@
 ---
 title: "UFT – Ultimate Frisbee Tournament Platform"
-date: "2024-2026"
 description: "Plataforma full-stack para gestionar, puntuar y rastrear torneos de Ultimate Frisbee en tiempo real, con estadísticas en vivo y panel de administración."
+date: 2024-01-01
 image: "/projects/uft-platform.png"
-tags: ["Next.js", "React Native", "TypeScript", "Docker", "Nginx", "MariaDB", "VPS", "DevOps"]
+tags: ["React 18", "NestJS", "React Native", "TypeScript", "Docker", "Nginx", "PostgreSQL", "VPS", "DevOps"]
 published: true
 ---
 
@@ -40,14 +40,18 @@ UFT proporciona:
 ## Arquitectura Técnica
 
 ### Frontend
-- **Next.js (App Router)** para paneles administrativos y públicos
+- **React 18** para paneles administrativos y públicos
 - **React Native + TypeScript** para la aplicación móvil de espectadores
 - Tailwind CSS + shadcn/ui
 
-### Backend e Infraestructura
+### Backend
+- **NestJS** como framework principal del backend
+- API RESTful
+- PostgreSQL como base de datos
+
+### Infraestructura
 - Servicios dockerizados
 - Nginx como reverse proxy
-- MariaDB
 - Desplegado en VPS (DigitalOcean)
 - SSL + aislamiento de entornos
 - Respaldos manuales y automatizados

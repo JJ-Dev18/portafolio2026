@@ -6,14 +6,21 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 import { compareDesc, format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
-export const metadata = {
-  title: "Blog | Juan Murillo",
-  description: "Artículos sobre desarrollo web, DevOps, arquitectura y más.",
-};
+export async function generateMetadata({ params }: { params: { lang: string } }) {
+  const t = await getTranslations({ locale: params.lang, namespace: "blog" });
+  return {
+    title: `${t("title")} | Juan Murillo`,
+    description: t("description"),
+  };
+}
 
-export default function BlogPage() {
+export default function BlogPage({ params }: { params: { lang: string } }) {
+  const t = useTranslations("blog");
+  const locale = params.lang === "es" ? es : enUS;
   const posts = allPosts
     .filter((post) => post.published)
     .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)));
@@ -27,11 +34,10 @@ export default function BlogPage() {
             {/* Header Section */}
             <div className="flex flex-col gap-4 text-center">
               <h1 className="text-4xl font-bold tracking-tighter md:text-5xl lg:text-6xl">
-                Blog
+                {t("title")}
               </h1>
               <p className="text-lg text-muted-foreground max-w-[700px] mx-auto">
-                Comparto mis experiencias, aprendizajes y reflexiones sobre desarrollo web,
-                DevOps y tecnología.
+                {t("description")}
               </p>
             </div>
 
@@ -43,7 +49,7 @@ export default function BlogPage() {
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                       <Calendar className="h-4 w-4" />
                       <time dateTime={post.date}>
-                        {format(new Date(post.date), "d 'de' MMMM, yyyy", { locale: es })}
+                        {format(new Date(post.date), params.lang === "es" ? "d 'de' MMMM, yyyy" : "MMMM d, yyyy", { locale })}
                       </time>
                     </div>
                     <CardTitle className="text-2xl">{post.title}</CardTitle>
@@ -65,7 +71,7 @@ export default function BlogPage() {
                       href={post.url}
                       className="group inline-flex items-center gap-2 text-sm font-semibold text-blue-600 transition-all duration-300 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                     >
-                      Leer más
+                      {t("readMore")}
                       <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                       <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-blue-600 transition-all duration-300 group-hover:w-full dark:bg-blue-400" />
                     </Link>
@@ -78,7 +84,7 @@ export default function BlogPage() {
             {posts.length === 0 && (
               <div className="flex flex-col items-center justify-center gap-4 py-16">
                 <p className="text-lg text-muted-foreground">
-                  No hay posts disponibles en este momento.
+                  {t("emptyState")}
                 </p>
               </div>
             )}

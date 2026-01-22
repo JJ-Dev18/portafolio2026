@@ -40,6 +40,33 @@
     "backToBlog": "Volver al blog",
     "emptyState": "No hay posts disponibles en este momento."
   },
+  "contact": {
+    "title": "Contacto",
+    "description": "¿Tienes un proyecto en mente o simplemente quieres charlar? ¡Me encantaría escucharte!",
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "Tu nombre",
+      "email": "Email",
+      "emailPlaceholder": "tu@email.com",
+      "message": "Mensaje",
+      "messagePlaceholder": "Cuéntame sobre tu proyecto...",
+      "send": "Enviar mensaje",
+      "sending": "Enviando..."
+    },
+    "info": {
+      "title": "Información de contacto",
+      "email": "Email",
+      "location": "Ubicación",
+      "locationValue": "Costa Rica",
+      "availability": "Disponibilidad",
+      "availabilityValue": "Disponible para proyectos freelance"
+    },
+    "social": {
+      "title": "Sígueme en",
+      "github": "GitHub",
+      "linkedin": "LinkedIn"
+    }
+  },
   "common": {
     "loading": "Cargando...",
     "error": "Error",

@@ -12,18 +12,20 @@ import { MDXContent } from "@/components/mdx-content";
 interface PostPageProps {
   params: Promise<{
     slug: string;
+    lang: string;
   }>;
 }
 
 export async function generateStaticParams() {
   return allPosts.map((post) => ({
     slug: post.slug,
+    lang: post.locale,
   }));
 }
 
 export async function generateMetadata({ params }: PostPageProps) {
-  const { slug } = await params;
-  const post = allPosts.find((p) => p.slug === slug);
+  const { slug, lang } = await params;
+  const post = allPosts.find((p) => p.slug === slug && p.locale === lang);
 
   if (!post) {
     return {};
@@ -43,8 +45,8 @@ export async function generateMetadata({ params }: PostPageProps) {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { slug } = await params;
-  const post = allPosts.find((p) => p.slug === slug);
+  const { slug, lang } = await params;
+  const post = allPosts.find((p) => p.slug === slug && p.locale === lang);
 
   if (!post || !post.published) {
     notFound();

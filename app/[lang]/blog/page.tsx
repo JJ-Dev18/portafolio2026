@@ -7,22 +7,23 @@ import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 import { compareDesc, format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
-import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
-export async function generateMetadata({ params }: { params: { lang: string } }) {
-  const t = await getTranslations({ locale: params.lang, namespace: "blog" });
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  const t = await getTranslations({ locale: lang, namespace: "blog" });
   return {
     title: `${t("title")} | Juan Murillo`,
     description: t("description"),
   };
 }
 
-export default function BlogPage({ params }: { params: { lang: string } }) {
-  const t = useTranslations("blog");
-  const locale = params.lang === "es" ? es : enUS;
+export default async function BlogPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  const t = await getTranslations({ locale: lang, namespace: "blog" });
+  const locale = lang === "es" ? es : enUS;
   const posts = allPosts
-    .filter((post) => post.published)
+    .filter((post) => post.published && post.locale === lang)
     .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)));
 
   return (
@@ -49,7 +50,7 @@ export default function BlogPage({ params }: { params: { lang: string } }) {
                     <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                       <Calendar className="h-4 w-4" />
                       <time dateTime={post.date}>
-                        {format(new Date(post.date), params.lang === "es" ? "d 'de' MMMM, yyyy" : "MMMM d, yyyy", { locale })}
+                        {format(new Date(post.date), lang === "es" ? "d 'de' MMMM, yyyy" : "MMMM d, yyyy", { locale })}
                       </time>
                     </div>
                     <CardTitle className="text-2xl">{post.title}</CardTitle>

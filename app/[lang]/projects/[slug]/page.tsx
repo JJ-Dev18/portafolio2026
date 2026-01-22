@@ -12,18 +12,20 @@ import { MDXContent } from "@/components/mdx-content";
 interface ProjectPageProps {
   params: Promise<{
     slug: string;
+    lang: string;
   }>;
 }
 
 export async function generateStaticParams() {
   return allProjects.map((project) => ({
     slug: project.slug,
+    lang: project.locale,
   }));
 }
 
 export async function generateMetadata({ params }: ProjectPageProps) {
-  const { slug } = await params;
-  const project = allProjects.find((p) => p.slug === slug);
+  const { slug, lang } = await params;
+  const project = allProjects.find((p) => p.slug === slug && p.locale === lang);
 
   if (!project) {
     return {};
@@ -43,8 +45,8 @@ export async function generateMetadata({ params }: ProjectPageProps) {
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const { slug } = await params;
-  const project = allProjects.find((p) => p.slug === slug);
+  const { slug, lang } = await params;
+  const project = allProjects.find((p) => p.slug === slug && p.locale === lang);
 
   if (!project || !project.published) {
     notFound();

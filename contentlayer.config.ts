@@ -2,7 +2,7 @@ import { defineDocumentType, makeSource } from 'contentlayer2/source-files';
 
 export const Project = defineDocumentType(() => ({
   name: 'Project',
-  filePathPattern: `projects/**/*.mdx`,
+  filePathPattern: `**\/projects/**/*.mdx`,
   contentType: 'mdx',
   fields: {
     title: {
@@ -37,9 +37,17 @@ export const Project = defineDocumentType(() => ({
     },
   },
   computedFields: {
+    locale: {
+      type: 'string',
+      resolve: (project) => project._raw.flattenedPath.split('/')[0],
+    },
     url: {
       type: 'string',
-      resolve: (project) => `/projects/${project._raw.flattenedPath.split('/').pop()}`,
+      resolve: (project) => {
+        const locale = project._raw.flattenedPath.split('/')[0];
+        const slug = project._raw.flattenedPath.split('/').pop();
+        return `/${locale}/projects/${slug}`;
+      },
     },
     slug: {
       type: 'string',
@@ -50,7 +58,7 @@ export const Project = defineDocumentType(() => ({
 
 export const Post = defineDocumentType(() => ({
   name: 'Post',
-  filePathPattern: `posts/**/*.mdx`,
+  filePathPattern: `**\/posts/**/*.mdx`,
   contentType: 'mdx',
   fields: {
     title: {
@@ -85,9 +93,17 @@ export const Post = defineDocumentType(() => ({
     },
   },
   computedFields: {
+    locale: {
+      type: 'string',
+      resolve: (post) => post._raw.flattenedPath.split('/')[0],
+    },
     url: {
       type: 'string',
-      resolve: (post) => `/blog/${post._raw.flattenedPath.split('/').pop()}`,
+      resolve: (post) => {
+        const locale = post._raw.flattenedPath.split('/')[0];
+        const slug = post._raw.flattenedPath.split('/').pop();
+        return `/${locale}/blog/${slug}`;
+      },
     },
     slug: {
       type: 'string',

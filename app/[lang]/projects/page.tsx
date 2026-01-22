@@ -6,21 +6,22 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { compareDesc } from "date-fns";
-import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
-export async function generateMetadata({ params }: { params: { lang: string } }) {
-  const t = await getTranslations({ locale: params.lang, namespace: "projects" });
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  const t = await getTranslations({ locale: lang, namespace: "projects" });
   return {
     title: `${t("title")} | Juan Murillo`,
     description: t("description"),
   };
 }
 
-export default function ProjectsPage() {
-  const t = useTranslations("projects");
+export default async function ProjectsPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  const t = await getTranslations({ locale: lang, namespace: "projects" });
   const projects = allProjects
-    .filter((project) => project.published)
+    .filter((project) => project.published && project.locale === lang)
     .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)));
 
   return (

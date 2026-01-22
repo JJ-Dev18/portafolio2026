@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
 import { MDXContent } from "@/components/mdx-content";
+import { getTranslations } from "next-intl/server";
 
 interface PostPageProps {
   params: Promise<{
@@ -47,6 +48,8 @@ export async function generateMetadata({ params }: PostPageProps) {
 export default async function PostPage({ params }: PostPageProps) {
   const { slug, lang } = await params;
   const post = allPosts.find((p) => p.slug === slug && p.locale === lang);
+  const t = await getTranslations({ locale: lang, namespace: "blog" });
+  const locale = lang === "es" ? es : enUS;
 
   if (!post || !post.published) {
     notFound();
@@ -60,9 +63,9 @@ export default async function PostPage({ params }: PostPageProps) {
           {/* Back Button */}
           <div className="mb-8">
             <Button variant="ghost" asChild>
-              <Link href="/blog">
+              <Link href={`/${lang}/blog`}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Volver al blog
+                {t("backToBlog")}
               </Link>
             </Button>
           </div>
@@ -78,7 +81,7 @@ export default async function PostPage({ params }: PostPageProps) {
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 <time dateTime={post.date}>
-                  {format(new Date(post.date), "d 'de' MMMM, yyyy", { locale: es })}
+                  {format(new Date(post.date), lang === "es" ? "d 'de' MMMM, yyyy" : "MMMM d, yyyy", { locale })}
                 </time>
               </div>
             </div>

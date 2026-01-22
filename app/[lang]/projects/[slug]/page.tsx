@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
 import { MDXContent } from "@/components/mdx-content";
+import { getTranslations } from "next-intl/server";
 
 interface ProjectPageProps {
   params: Promise<{
@@ -47,6 +48,8 @@ export async function generateMetadata({ params }: ProjectPageProps) {
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug, lang } = await params;
   const project = allProjects.find((p) => p.slug === slug && p.locale === lang);
+  const t = await getTranslations({ locale: lang, namespace: "projects" });
+  const locale = lang === "es" ? es : enUS;
 
   if (!project || !project.published) {
     notFound();
@@ -60,9 +63,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           {/* Back Button */}
           <div className="mb-8">
             <Button variant="ghost" asChild>
-              <Link href="/projects">
+              <Link href={`/${lang}/projects`}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Volver a proyectos
+                {t("backToProjects")}
               </Link>
             </Button>
           </div>
@@ -78,7 +81,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 <time dateTime={project.date}>
-                  {format(new Date(project.date), "d 'de' MMMM, yyyy", { locale: es })}
+                  {format(new Date(project.date), lang === "es" ? "d 'de' MMMM, yyyy" : "MMMM d, yyyy", { locale })}
                 </time>
               </div>
             </div>

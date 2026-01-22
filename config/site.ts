@@ -7,8 +7,8 @@ export const siteConfig: SiteConfig = {
   ogImage: "https://juanmurillo.dev/og.jpg",
   links: {
     linkedin: "https://linkedin.com/in/juanmurillo",
-    github: "https://github.com/juanmurillo",
-    email: "mailto:juan@example.com",
+    github: "https://github.com/JJ-Dev18",
+    email: "mailto:jj.murillo182020@gmail.com",
   },
   mainNav: [
     {

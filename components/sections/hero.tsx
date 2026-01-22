@@ -30,12 +30,14 @@ export function Hero() {
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-4">
-        <Button size="lg" asChild>
-          <Link href={`/${lang}/projects`}>
-            {t("cta_projects")}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
-        </Button>
+        <Link 
+          href={`/${lang}/projects`}
+          className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/50 dark:from-blue-500 dark:to-cyan-400 dark:hover:shadow-cyan-500/50"
+        >
+          <span className="relative z-10">{t("cta_projects")}</span>
+          <ArrowRight className="relative z-10 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-700 to-cyan-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-blue-600 dark:to-cyan-500" />
+        </Link>
         <Button variant="outline" size="lg" asChild>
           <Link href={`/${lang}/contact`}>{t("cta_contact")}</Link>
         </Button>

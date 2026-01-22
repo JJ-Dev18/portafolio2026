@@ -32,7 +32,7 @@ export function Hero() {
       <div className="flex flex-wrap items-center justify-center gap-4">
         <Link 
           href={`/${lang}/projects`}
-          className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/50 dark:from-blue-500 dark:to-cyan-400 dark:hover:shadow-cyan-500/50"
+          className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-gradient-to-r from-blue-600 to-cyan-500 px-8 py-4 text-base font-medium text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-500/50 dark:from-blue-500 dark:to-cyan-400 dark:hover:shadow-cyan-500/50"
         >
           <span className="relative z-10">{t("cta_projects")}</span>
           <ArrowRight className="relative z-10 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />

@@ -26,6 +26,12 @@
       "enterprise": "Enterprise Deployment Experience"
     }
   },
+  "certificates": {
+    "title": "Certificates",
+    "description": "Credentials and certifications that support my professional experience.",
+    "viewCredential": "View credential",
+    "emptyState": "No certificates published yet."
+  },
   "projects": {
     "title": "My Projects",
     "description": "A collection of projects I've worked on, from web applications to infrastructure and DevOps solutions.",

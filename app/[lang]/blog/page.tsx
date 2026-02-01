@@ -2,7 +2,6 @@ import { allPosts } from "contentlayer/generated";
 import { Header } from "@/components/sections/header";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 import { compareDesc, format } from "date-fns";

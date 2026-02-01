@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
 import { MDXContent } from "@/components/mdx-content";
@@ -35,12 +36,34 @@ export async function generateMetadata({ params }: ProjectPageProps) {
   return {
     title: `${project.title} | Juan Murillo`,
     description: project.description,
+    keywords: project.tags,
+    alternates: {
+      canonical: `/${lang}/projects/${slug}`,
+      languages: {
+        es: `/es/projects/${slug}`,
+        en: `/en/projects/${slug}`,
+        "x-default": `/es/projects/${slug}`,
+      },
+    },
     openGraph: {
       title: project.title,
       description: project.description,
       type: "article",
+      url: `/${lang}/projects/${slug}`,
       publishedTime: project.date,
       authors: ["Juan Murillo"],
+      images: [
+        {
+          url: project.image,
+          alt: project.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: project.description,
+      images: [project.image],
     },
   };
 }
@@ -76,6 +99,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               {project.title}
             </h1>
             <p className="text-xl text-muted-foreground">{project.description}</p>
+
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-border/50 bg-muted">
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                priority
+                className="object-cover"
+                sizes="(min-width: 1024px) 768px, 100vw"
+              />
+            </div>
 
             <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
               {project.projectUrl && (

@@ -1,7 +1,6 @@
 "use client";
 
 import { Header } from "@/components/sections/header";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Github, Linkedin, Mail, MapPin, Clock } from "lucide-react";
 import { useTranslations } from "next-intl";

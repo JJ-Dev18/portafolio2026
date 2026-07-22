@@ -1,31 +1,31 @@
 ---
 title: "Diseñando el scorekeeping en tiempo real"
-description: "Mantener a cada anotador, espectador y vista de estadísticas consistente mientras un partido está en vivo."
+description: "Mantener a cada anotador, espectador y vista de estadísticas consistente mientras un partido está en vivo — con las reglas propias de Ultimate impuestas en tiempo real."
 date: 2025-03-19
-tags: ["Tiempo real", "Concurrencia", "NestJS", "NATS JetStream"]
+tags: ["Tiempo real", "Concurrencia", "NestJS", "Socket.io"]
 order: 1
 ---
 
 <Callout type="problem">
-UFT necesita que los puntajes registrados durante un partido en vivo sean visibles e inmediatamente consistentes en todos los clientes que lo están viendo — dashboards de organizadores, vistas de espectadores y estadísticas en vivo. Varios partidos corren de forma concurrente durante un torneo, y un partido puede tener más de una persona habilitada para registrar un puntaje.
+Los partidos en vivo necesitan que cada cliente conectado — el anotador, los espectadores, las estadísticas en vivo — converja al mismo estado de inmediato, y ese estado no es genérico: un gol solo lo puede anotar el equipo que ataca a menos que sea un Callahan (un punto exclusivo de la defensa), un "break" depende de si el equipo que anotó es el mismo que hizo el pull, y las divisiones mixtas tienen reglas de proporción de género que cambian según la paridad del conteo de goles. Esto tiene que sostenerse bajo ráfagas de eventos durante juego rápido, no solo una actualización a la vez.
 </Callout>
 
 <Callout type="alternatives">
-Pendiente — esta sección cubrirá los enfoques específicos que evalué (por ejemplo, polling vs. push, single-writer vs. concurrencia optimista) una vez documentado en detalle.
+La decisión documentada es Socket.io sobre dos namespaces (`/events` para partidos en vivo, `/notifications` para todo lo demás), con las reglas propias de Ultimate impuestas directamente en la capa de gateway a medida que llegan los eventos. No tengo un registro escrito de otros transportes evaluados formalmente de antemano — esto refleja el enfoque que se implementó, no un documento de comparación completo.
 </Callout>
 
 <Callout type="decision">
-Pendiente — el mecanismo real que usa UFT hoy, escrito con precisión en vez de resumido de memoria.
+Toda la lógica de dominio vive en el gateway a medida que llegan los eventos: seguimiento de posesión, detección de break (comparando quién anotó contra quién hizo el pull), validación de Callahan (rechazando un gol reclamado por el equipo atacante cuando el estado indica que debería ser un Callahan), y advertencias de proporción de género en división mixta en conteos de goles impares. Las estadísticas no se recalculan en cada evento individual — el recálculo tiene debounce de 3 segundos para que una ráfaga de jugadas de anotación no dispare un recálculo por evento. Editar o eliminar un evento está restringido al último registrado, y hacerlo revierte explícitamente el estado de posesión/puntaje/mixtura en vez de reproducir todo el historial del partido. La autenticación es opcional para conectarse (los espectadores pueden ver sin token) pero requerida para cualquier acción que cambie el estado — el gateway verifica `client.data.authenticated` antes de aceptar `startTimer` o `registerEvent`.
 </Callout>
 
 <Callout type="tradeoffs">
-Pendiente.
+Mantener esta lógica en el gateway lo hizo rápido de construir e iterar mientras las reglas todavía se estaban definiendo, a costa de un archivo muy grande — creció a cerca de 3,200 líneas antes de dividirse parcialmente en pares servicio+store en `rooms/`, `state/` y `timer/`, cada uno con tests unitarios independientes. La regla de editar/eliminar solo el último evento mantiene simple la reconciliación de estado y evita construir un historial de deshacer completo, pero significa que corregir un error anterior a mitad de partido no está soportado — una limitación real y aceptada, no un descuido.
 </Callout>
 
 <Callout type="result">
-Pendiente — cómo se ve esto en producción hoy, con números reales donde existan.
+La capa de websockets tiene 83 tests con más de 90% de cobertura en sus rutas críticas, incluyendo tests de concurrencia dedicados: 100+ espectadores en la misma sala, 10+ partidos simultáneos con aislamiento de sala verificado, desconexiones masivas, y reconexión rápida — todos pasando. Por separado, un test de carga escrito a mano (usando el mismo `socket.io-client` que usa el frontend, no una herramienta genérica) midió 100% de éxito en conexión y unión a sala con 0 errores durante la corrida, pero un tiempo promedio de conexión de cerca de 3.9 segundos y de unión a sala de cerca de 1.9 segundos — que, contra el benchmark propio del equipo (menos de 500ms como objetivo), se califica honestamente como "alto", no como "resuelto".
 </Callout>
 
 <Callout type="lessons">
-Pendiente.
+Un intento temprano de test de carga con una herramienta genérica se conectó al namespace equivocado de Socket.io y produjo una señal falsa de "esto está roto" — el arreglo fue escribir un test más pequeño y preciso a nivel de protocolo usando la librería cliente real en vez de confiar en una herramienta de propósito general. Por separado, la corrección se validó (0 errores, aislamiento de sala limpio) antes que la latencia — un orden defendible, pero deja una brecha real y reconocida entre "funciona" y "es rápido" que ya está en la lista: revisar índices en el camino de `joinRoom` y espaciar los lotes de conexión de forma más conservadora.
 </Callout>

@@ -1,31 +1,31 @@
 ---
 title: "Arquitectura orientada a eventos con NATS"
-description: "Por qué el backend de UFT publica eventos en vez de calcular todo de forma síncrona."
+description: "Desacoplar el feed social de la operación de torneos en vivo — y ser honesto sobre qué está realmente conectado versus solo declarado."
 date: 2025-03-19
 tags: ["NATS JetStream", "Arquitectura orientada a eventos", "Backend"]
 order: 4
 ---
 
 <Callout type="problem">
-Varias partes de UFT necesitan reaccionar al mismo hecho — se registró un puntaje — sin que toda esa reacción ocurra dentro del request que lo registró: estadísticas, posiciones y vistas de espectadores dependen de eso, pero la API no debería bloquearse esperando que las tres terminen.
+El feed social (posts, follows, actividad de jugador) es un servicio separado (`social-bff`) del backend principal de torneos, y no debería poder ralentizar o romper el registro de puntajes, las inscripciones, o la automatización de torneos — pero aun así necesita saber cuándo termina un partido o se inscribe un jugador, de forma confiable, no solo "casi siempre".
 </Callout>
 
 <Callout type="alternatives">
-Pendiente — qué consideré además de NATS JetStream (otro broker, callbacks HTTP simples, polling por cron), y por qué no encajaban.
+Una llamada HTTP directa del backend a `social-bff` en cada acción relevante era la alternativa más simple, pero acoplaría la disponibilidad de ambos servicios — si `social-bff` (o su base de datos) estuviera lento o caído, los requests de fin de partido heredarían esa latencia o falla. Se eligió NATS JetStream específicamente sobre NATS simple porque `social-bff` necesita entrega at-least-once con replay (un mensaje publicado mientras está caído no debería perderse), algo que el pub/sub simple no da.
 </Callout>
 
 <Callout type="decision">
-Pendiente — específicamente por qué JetStream sobre NATS simple, qué subjects/streams existen, y qué garantías de entrega usa realmente UFT.
+Un único stream de JetStream (`UFT_EVENTS`) con una convención de subject (`uft.<dominio>.<evento>`, suscrito con wildcard como `uft.>`), retención de 7 días. `backend-nest` publica fire-and-forget: cada llamada de publicación está envuelta de forma que si NATS no es alcanzable, se registra en logs y se ignora — una caída de NATS nunca debe romper el request que la originó. `social-bff` consume a través de un consumer durable y nombrado de JetStream con ack/nak explícito, así retoma exactamente donde quedó tras un reinicio en vez de perder eventos o reprocesar todo el stream.
 </Callout>
 
 <Callout type="tradeoffs">
-Pendiente.
+Se declaran cuatro subjects de evento (partido terminado, jugador inscrito, torneo actualizado, ranking de jugador cambiado), pero solo dos se publican realmente en algún lugar del código hoy — partido terminado y jugador inscrito. Los otros dos se consumen del lado de `social-bff` pero no tienen todavía un punto de publicación en `backend-nest`: evidencia real y honesta de diseñar el contrato antes que la implementación, no un vacío oculto. Por separado, las constantes de subject se duplican a mano entre ambos servicios (no hay paquete compartido), con un comentario que exige sincronización manual — un riesgo de acoplamiento real que una librería compartida eliminaría.
 </Callout>
 
 <Callout type="result">
-Pendiente.
+En producción, terminar un partido publica `uft.match.finished` con ambos equipos, puntajes y categoría, y `social-bff` lo convierte en un post de feed autorado por el sistema (por ejemplo una línea de resultado, o "Empate" en caso de igualdad). Confirmar una inscripción a torneo publica `uft.player.registered_tournament` una vez por cada jugador del roster, y cada uno se convierte en un post de actividad personal autorado por la cuenta de ese jugador, no un post genérico del sistema.
 </Callout>
 
 <Callout type="lessons">
-Pendiente.
+Publicación fire-and-forget combinada con un consumer durable y con ack explícito es una buena división para "el producto principal nunca debe romperse porque una funcionalidad secundaria está caída" — pero declarar más del contrato de eventos de lo que realmente está conectado solo es honesto si se hace seguimiento de qué mitad es real, que es por eso que este texto lo dice directamente en vez de describir los cuatro subjects como en vivo. Las constantes de subject sincronizadas a mano son la siguiente deuda que vale la pena eliminar, idealmente antes de que un tercer consumidor empeore el problema de sincronización.
 </Callout>

@@ -1,31 +1,31 @@
 ---
 title: "RBAC implementation"
-description: "What roles UFT actually needs, and what was hard about enforcing them consistently."
+description: "13 role-scoped portals, roles that drifted across two seeders, and what a real security review found."
 date: 2025-03-19
 tags: ["Security", "RBAC", "NestJS"]
 order: 3
 ---
 
 <Callout type="problem">
-UFT has more than one kind of user acting on the same tournament at the same time — organizers, scorekeepers, and administrators each need different capabilities, and getting that wrong in either direction (too permissive or too restrictive) breaks the product during a live event.
+UFT has 13 role-scoped portals across a domain hierarchy (Federation → League → Club → Team → Player) — federation presidents, league presidents, club admins, coaches, team leaders, tournament organizers, scorekeepers, and players all need different, narrower capabilities on the same underlying data. Early on, roles got seeded inconsistently across two separate seeders plus ad-hoc strings used directly in `@Roles(...)` decorators, so the same conceptual role ended up with multiple literal name variants in the database.
 </Callout>
 
 <Callout type="alternatives">
-Pending — the actual role model (what roles exist, what each can do) and what alternatives I considered before landing on it.
+The alternative to fixing the naming drift was a one-time data migration to rename every role consistently across the database. Instead, the decision was a compatibility layer: a role-alias table that maps known variants (`"Organizador"`, `"Tournament Organizer"` → `"Organizador de Torneo"`; `"Presidente de Liga"`, `"Liga"` → `"Administrador de Liga"`, etc.) to a canonical name, so a `@Roles(...)` check passes regardless of which variant a given user was actually seeded with. The rule is explicit: only group variants of the *same* privilege level — never merge roles across different levels.
 </Callout>
 
 <Callout type="decision">
-Pending.
+Access control runs through a single guard that checks both role-based (`@Roles`) and permission-based (`@RequirePermissions`) metadata via `Reflector.getAllAndOverride` — if a route declares neither, it's open to any authenticated user; if it declares either, the request must satisfy what's declared. The "Super Administrador" role is a hardcoded bypass, deliberately: it's total control by definition, and it's safe specifically because that role can't be self-assigned (a privilege-escalation path that let a user grant themselves admin was found and closed). The safe default is explicit: a required check that's simply absent from the metadata never grants access on its own.
 </Callout>
 
 <Callout type="tradeoffs">
-Pending.
+The alias table avoided a risky mass-rename across live data, but it's a permanent piece of indirection now — and it coexists with two parallel role/permission entity definitions (one under `auth/`, one under a separate `rbac/` module) that were never fully unified. That's real, acknowledged debt: pragmatic in the moment, not free.
 </Callout>
 
 <Callout type="result">
-Pending.
+A security review run against this system in July 2026 found and fixed four concrete issues: the privilege-escalation path noted above, a guard that wasn't actually enforcing what it appeared to, an open seed endpoint, and passwords showing up in logs — each with a regression test added afterward. Separately, an IDOR review of file-upload endpoints (avatar, player photo, banner, venue photo) found they weren't checking that the uploading user actually owned the resource being modified; that's now validated against the authenticated user, backed by 11 regression test cases. Two other upload endpoints (generic image and document upload) are explicitly still open and tracked, not silently left unfixed.
 </Callout>
 
 <Callout type="lessons">
-Pending — including anything that was genuinely hard about enforcing this consistently across the API, not just "how RBAC works."
+A permission system that accumulates role-name variants across multiple seeders and ad-hoc decorator strings will eventually need either a compatibility layer or a breaking migration — the alias table was the lower-risk choice given live data, but it's a patch, and the two parallel role/permission entity definitions are the real fix still owed. Separately: a security review is only as useful as what happens after it — finding four issues mattered less than pairing each fix with a regression test, and honestly tracking the two upload endpoints that are still open rather than declaring the review "done."
 </Callout>

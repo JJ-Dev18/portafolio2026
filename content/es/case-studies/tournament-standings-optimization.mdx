@@ -1,31 +1,31 @@
 ---
-title: "Optimizando las posiciones de torneo"
-description: "Recalcular las posiciones de un torneo en vivo sin que eso se vuelva el cuello de botella."
+title: "Optimizando posiciones y generación de brackets"
+description: "Hacer configurables los formatos de torneo en vez de codificarlos fijos — y proteger esa lógica con tests antes de refactorizar alrededor de ella."
 date: 2025-03-19
-tags: ["Rendimiento", "PostgreSQL", "Modelado de datos"]
+tags: ["Automatización de torneos", "Testing", "Modelado de datos"]
 order: 2
 ---
 
 <Callout type="problem">
-Las posiciones dependen de cada partido terminado en un torneo, y necesitan actualizarse apenas termina un partido — sin retraso, y sin competir con el camino de request que está registrando puntajes en vivo de otros partidos aún en curso.
+No todos los torneos usan el mismo formato. Round robin (2–8 equipos), eliminación simple (8/16/32 equipos), y grupos hacia eliminación (9–15 o 17+ equipos, con tamaños de grupo y cantidades de avance configurables) necesitan matemática distinta de generación de bracket y posiciones — y los organizadores además pedían formatos personalizados: brackets divididos por rango de ranking, y "fases de ranking" separadas para determinar posiciones exactas de equipos que no llegan al bracket principal.
 </Callout>
 
 <Callout type="alternatives">
-Pendiente — esta sección cubrirá cómo era un recálculo ingenuo, qué lo hizo insuficiente, y qué más consideré.
+La alternativa realista a un sistema de fases configurable era codificar un conjunto fijo de formatos y agregar código nuevo por cada forma de torneo nueva que pidieran los organizadores. En cambio, las fases se volvieron datos: cada fase tiene un `order`, un `teamsAdvancing` opcional, un `parentPhaseName` (debe coincidir exactamente con el nombre de una fase anterior, que es lo que define el pipeline), un `rankRange` opcional (ej. `"9-15"`) para brackets divididos/independientes, y un flag `fullRanking` con dos comportamientos distintos según si está asociado a una fase de grupos o de eliminación.
 </Callout>
 
 <Callout type="decision">
-Pendiente.
+Construir la lógica de bracket/posiciones sobre este modelo de configuración de fases en vez de caminos de código por formato, y — antes de refactorizar el código de frontend alrededor — escribir tests de caracterización contra la lógica real de propagación (`propagation.service.ts`) cubriendo casos de caja negra: un bracket de 4 equipos, uno de 8, uno con bye, y uno con walkover. Los tests describen lo que el sistema ya hace, así que un refactor que cambie los números se detecta de inmediato.
 </Callout>
 
 <Callout type="tradeoffs">
-Pendiente.
+Un grafo de fases configurable es mucho más flexible que formatos fijos, pero la flexibilidad tiene trampas reales que aparecen en la propia documentación: el enlace de fase padre requiere coincidencia exacta de nombre (un typo rompe silenciosamente el pipeline en vez de fallar ruidosamente en el punto del typo), y `fullRanking` significa dos cosas distintas según el contexto (generar automáticamente una fase de ranking para equipos que no avanzan en una fase de grupos, versus generar automáticamente partidos de consolación para perdedores dentro de una fase de eliminación) — una distinción fácil de confundir sin la guía abierta al lado.
 </Callout>
 
 <Callout type="result">
-Pendiente — incluyendo cómo se verificó la corrección, no solo el rendimiento.
+La matemática de formato cuadra contra ejemplos trabajados: round robin para 6 equipos produce 15 partidos (n(n-1)/2); eliminación simple para 16 equipos produce 15 partidos entre cuartos/semis/final; un ejemplo de 12 equipos en grupos hacia eliminación (3 grupos de 4, top 2 avanzan) produce 18 partidos de grupo que alimentan un knockout de 6 equipos. Durante un refactor de frontend no relacionado, los propios tests de caracterización del modelo de posiciones (19 de ellos, en `bracketsModel.ts`) detectaron un bug real de deduplicación: los partidos se deduplicaban por `matchId || tempId || home-away-phase`, y los partidos sin esos campos podían colisionar en la clave de respaldo y ser eliminados silenciosamente de la vista de posiciones.
 </Callout>
 
 <Callout type="lessons">
-Pendiente.
+Escribir tests de caracterización contra el comportamiento existente antes de tocar el código alrededor fue lo que detectó el bug de deduplicación — no se encontró por inspección, se encontró porque existía una suite de tests contra la cual comparar. El requisito de coincidencia exacta de nombre para enlazar fases es una arista conocida; la documentación (con una sección dedicada de FAQ y errores comunes) es la mitigación actual, no un arreglo de código, lo cual es un trade-off honesto y no uno terminado.
 </Callout>

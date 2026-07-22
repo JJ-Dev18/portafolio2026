@@ -1,31 +1,31 @@
 ---
-title: "Optimizing tournament standings"
-description: "Recomputing standings for a live tournament without it becoming the bottleneck."
+title: "Optimizing tournament standings and bracket generation"
+description: "Making tournament formats configurable instead of hardcoded — and protecting that logic with tests before refactoring around it."
 date: 2025-03-19
-tags: ["Performance", "PostgreSQL", "Data Modeling"]
+tags: ["Tournament Automation", "Testing", "Data Modeling"]
 order: 2
 ---
 
 <Callout type="problem">
-Standings depend on every completed match in a tournament, and they need to update as soon as a match finishes — not on a delay, and not in a way that competes with the request path that's recording live scores for other, still-in-progress matches.
+Tournaments don't all use the same format. Round robin (2–8 teams), single elimination (8/16/32 teams), and groups-into-elimination (9–15 or 17+ teams, with configurable group sizes and advancing counts) all need different bracket generation and standings math — and organizers also wanted custom formats: split brackets by rank range, and separate "ranking phases" to determine exact placements for teams that don't make the main bracket.
 </Callout>
 
 <Callout type="alternatives">
-Pending — this section will cover what a naive recomputation looked like, what made it insufficient, and what else I considered.
+The realistic alternative to a configurable phase system was hardcoding a fixed set of formats and adding new code for every new tournament shape organizers asked for. Instead, phases became data: each phase has an `order`, an optional `teamsAdvancing`, a `parentPhaseName` (must match an earlier phase's name exactly, which is what defines the pipeline), an optional `rankRange` (e.g. `"9-15"`) for split/independent brackets, and a `fullRanking` flag with two distinct behaviors depending on whether it's attached to a groups phase or an elimination phase.
 </Callout>
 
 <Callout type="decision">
-Pending.
+Build the bracket/standings logic against this phase-configuration model rather than per-format code paths, and — before refactoring any of the surrounding frontend code — write characterization tests against the actual propagation logic (`propagation.service.ts`) covering black-box cases: a 4-team bracket, an 8-team bracket, a bracket with a bye, and a bracket with a walkover. The tests describe what the system already does, so a refactor that changes the numbers gets caught immediately.
 </Callout>
 
 <Callout type="tradeoffs">
-Pending.
+A configurable phase graph is much more flexible than hardcoded formats, but the flexibility has real footguns that show up in the documentation itself: parent-phase linking requires an exact name match (a typo silently breaks the pipeline instead of erroring loudly at the point of the typo), and `fullRanking` means two different things depending on context (auto-generating a ranking phase for non-advancing teams in a groups phase, versus auto-generating consolation matches for losers within an elimination phase) — a distinction that's easy to get wrong without the guide open next to you.
 </Callout>
 
 <Callout type="result">
-Pending — including how correctness was verified, not just how it performs.
+The format math checks out against worked examples: round robin for 6 teams produces 15 matches (n(n-1)/2); single elimination for 16 teams produces 15 matches across quarterfinals/semis/final; a 12-team groups-into-elimination example (3 groups of 4, top 2 advancing) produces 18 group matches feeding a 6-team knockout. During an unrelated frontend refactor, the standings model's own characterization tests (19 of them, in `bracketsModel.ts`) caught a real deduplication bug: matches were being deduped by `matchId || tempId || home-away-phase`, and matches missing those fields could collide on the fallback key and get silently dropped from the standings view.
 </Callout>
 
 <Callout type="lessons">
-Pending.
+Writing characterization tests against existing behavior before touching the code around it is what caught the dedup bug — it wasn't found by inspection, it was found because a test suite existed to compare against. The exact-name-match requirement for phase linking is a known rough edge; the documentation (with a dedicated FAQ and common-errors section) is the current mitigation, not a code fix, which is an honest trade-off rather than a finished one.
 </Callout>

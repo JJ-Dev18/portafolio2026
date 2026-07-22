@@ -1,31 +1,31 @@
 ---
 title: "Implementación de RBAC"
-description: "Qué roles necesita realmente UFT, y qué fue difícil de imponer de forma consistente."
+description: "13 portales por rol, roles que se desalinearon entre dos seeders, y qué encontró una revisión de seguridad real."
 date: 2025-03-19
 tags: ["Seguridad", "RBAC", "NestJS"]
 order: 3
 ---
 
 <Callout type="problem">
-UFT tiene más de un tipo de usuario actuando sobre el mismo torneo al mismo tiempo — organizadores, anotadores y administradores necesitan capacidades distintas, y equivocarse en cualquiera de las dos direcciones (demasiado permisivo o demasiado restrictivo) rompe el producto durante un evento en vivo.
+UFT tiene 13 portales por rol a lo largo de una jerarquía de dominio (Federación → Liga → Club → Equipo → Jugador) — presidentes de federación, presidentes de liga, admins de club, coaches, líderes de equipo, organizadores de torneo, anotadores y jugadores necesitan capacidades distintas y más limitadas sobre los mismos datos subyacentes. Al principio, los roles se sembraron de forma inconsistente entre dos seeders separados más strings ad-hoc usados directamente en decoradores `@Roles(...)`, así que el mismo rol conceptual terminó con múltiples variantes de nombre literal en la base de datos.
 </Callout>
 
 <Callout type="alternatives">
-Pendiente — el modelo de roles real (qué roles existen, qué puede hacer cada uno) y qué alternativas consideré antes de llegar a él.
+La alternativa a corregir esa desalineación de nombres era una migración de datos única para renombrar cada rol de forma consistente en toda la base de datos. En cambio, la decisión fue una capa de compatibilidad: una tabla de alias de rol que mapea variantes conocidas (`"Organizador"`, `"Tournament Organizer"` → `"Organizador de Torneo"`; `"Presidente de Liga"`, `"Liga"` → `"Administrador de Liga"`, etc.) a un nombre canónico, así una verificación `@Roles(...)` pasa sin importar con qué variante se haya sembrado realmente a un usuario. La regla es explícita: solo agrupar variantes del MISMO nivel de privilegio — nunca fusionar roles de distinto nivel.
 </Callout>
 
 <Callout type="decision">
-Pendiente.
+El control de acceso pasa por un único guard que verifica tanto metadata basada en roles (`@Roles`) como en permisos (`@RequirePermissions`) vía `Reflector.getAllAndOverride` — si una ruta no declara ninguno, queda abierta a cualquier usuario autenticado; si declara alguno, el request debe satisfacer lo declarado. El rol "Super Administrador" es un bypass codificado, deliberadamente: es control total por definición, y es seguro específicamente porque ese rol no se puede autoasignar (se encontró y cerró una ruta de escalada de privilegios que permitía a un usuario otorgarse admin a sí mismo). El default seguro es explícito: una verificación requerida que simplemente está ausente de la metadata nunca concede acceso por sí sola.
 </Callout>
 
 <Callout type="tradeoffs">
-Pendiente.
+La tabla de alias evitó un renombre masivo riesgoso sobre datos en vivo, pero ahora es una pieza permanente de indirección — y coexiste con dos definiciones paralelas de entidades de rol/permiso (una bajo `auth/`, otra bajo un módulo `rbac/` separado) que nunca se unificaron por completo. Eso es deuda real y reconocida: pragmática en el momento, no gratis.
 </Callout>
 
 <Callout type="result">
-Pendiente.
+Una revisión de seguridad ejecutada sobre este sistema en julio de 2026 encontró y corrigió cuatro problemas concretos: la ruta de escalada de privilegios mencionada arriba, un guard que no estaba imponiendo realmente lo que parecía, un endpoint de seed abierto, y contraseñas apareciendo en logs — cada uno con un test de regresión agregado después. Por separado, una revisión de IDOR en endpoints de subida de archivos (avatar, foto de jugador, banner, foto de sede) encontró que no verificaban que el usuario que subía el archivo realmente fuera dueño del recurso que estaba modificando; eso ahora se valida contra el usuario autenticado, respaldado por 11 casos de test de regresión. Otros dos endpoints de subida (imagen genérica y documento) siguen explícitamente abiertos y en seguimiento, no dejados sin corregir en silencio.
 </Callout>
 
 <Callout type="lessons">
-Pendiente — incluyendo lo que fue genuinamente difícil de imponer de forma consistente en toda la API, no solo "cómo funciona RBAC".
+Un sistema de permisos que acumula variantes de nombre de rol entre múltiples seeders y strings ad-hoc en decoradores eventualmente va a necesitar o una capa de compatibilidad o una migración disruptiva — la tabla de alias fue la opción de menor riesgo dado que había datos en vivo, pero es un parche, y las dos definiciones paralelas de entidades de rol/permiso son el arreglo real que todavía se debe. Por separado: una revisión de seguridad solo es tan útil como lo que pasa después — encontrar cuatro problemas importó menos que acompañar cada arreglo con un test de regresión, y reconocer honestamente los dos endpoints de subida que siguen abiertos en vez de declarar la revisión "terminada".
 </Callout>

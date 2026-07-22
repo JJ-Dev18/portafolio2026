@@ -1,31 +1,31 @@
 ---
 title: "Designing realtime scorekeeping"
-description: "Keeping every scorekeeper, spectator, and stats view consistent while a match is live."
+description: "Keeping every scorekeeper, spectator, and stats view consistent while a match is live — with Ultimate's own rules enforced in real time."
 date: 2025-03-19
-tags: ["Realtime", "Concurrency", "NestJS", "NATS JetStream"]
+tags: ["Realtime", "Concurrency", "NestJS", "Socket.io"]
 order: 1
 ---
 
 <Callout type="problem">
-UFT needs scores recorded during a live match to be immediately visible and consistent across every client watching that match — organizers' dashboards, spectator views, and live statistics. Multiple games run concurrently during a tournament, and a match can have more than one person able to record a score.
+Live matches need every connected client — the scorekeeper, spectators, live statistics — converging on the same state immediately, and the state itself isn't generic: a goal can only be scored by the attacking team unless it's a Callahan (a defense-only score), a "break" depends on whether the team that scored is the same team that pulled, and mixed-gender divisions have gender-ratio rules that change based on the parity of the goal count. This has to hold under bursts of events during fast play, not just one update at a time.
 </Callout>
 
 <Callout type="alternatives">
-Pending — this section will cover the specific approaches I evaluated (e.g. polling vs. push, single-writer vs. optimistic concurrency) once documented in detail.
+The documented decision is Socket.io over two namespaces (`/events` for live matches, `/notifications` for everything else), with the Ultimate-specific rules enforced directly in the gateway layer as events arrive. I don't have a written record of other transports being formally evaluated beforehand — this reflects the approach that shipped, not a full comparison document.
 </Callout>
 
 <Callout type="decision">
-Pending — the actual mechanism UFT uses today, written up precisely rather than summarized from memory.
+All of the domain logic lives in the gateway as events come in: possession tracking, break detection (comparing who scored to who pulled), Callahan validation (rejecting a goal claimed by the attacking team when the state says it should be a Callahan), and mixed-division gender-ratio warnings on odd goal counts. Statistics aren't recalculated on every single event — recalculation is debounced by 3 seconds so a burst of scoring plays doesn't trigger a recompute per event. Editing or deleting an event is restricted to the last one registered, and doing so explicitly reverts possession/score/mixtura state rather than replaying the whole match history. Authentication is optional to connect (spectators can watch without a token) but required for any action that changes state — the gateway checks `client.data.authenticated` before honoring `startTimer` or `registerEvent`.
 </Callout>
 
 <Callout type="tradeoffs">
-Pending.
+Keeping this logic in the gateway made it fast to build and iterate on while the rules were still being nailed down, at the cost of a very large file — it grew to roughly 3,200 lines before being partially split into `rooms/`, `state/`, and `timer/` service+store pairs, each independently unit-tested. The last-event-only edit/delete rule keeps state reconciliation simple and avoids building a full undo history, but it means correcting an older mistake mid-match isn't supported — a real, accepted limitation rather than an oversight.
 </Callout>
 
 <Callout type="result">
-Pending — what this looks like in production today, with real numbers where they exist.
+The websocket layer has 83 tests at 90%+ coverage for its critical paths, including dedicated concurrency tests: 100+ spectators in the same room, 10+ simultaneous matches with verified room isolation, mass disconnects, and fast reconnection — all passing. Separately, a hand-written load test (using the same `socket.io-client` the frontend uses, not a generic tool) measured 100% connection and join success with 0 errors across the run, but average connection time around 3.9 seconds and join-room time around 1.9 seconds — which, against the team's own benchmark (under 500ms as the target), is honestly rated "high," not "done."
 </Callout>
 
 <Callout type="lessons">
-Pending.
+An early load-testing attempt with a generic tool connected to the wrong Socket.io namespace and produced a false "this is broken" signal — the fix was writing a smaller, protocol-accurate test using the real client library instead of trusting a general-purpose tool. Separately, correctness was validated (0 errors, clean room isolation) before latency was — a defensible order, but it leaves a real, acknowledged gap between "works" and "fast" that's now on the list: reviewing indexes on the `joinRoom` path and pacing connection batches more conservatively.
 </Callout>

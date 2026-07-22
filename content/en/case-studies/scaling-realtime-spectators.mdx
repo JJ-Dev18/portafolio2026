@@ -1,31 +1,31 @@
 ---
 title: "Scaling realtime spectators"
-description: "What happens to UFT's current infrastructure as spectator traffic grows past what it sees today."
+description: "Measuring UFT's realtime infrastructure honestly — what the load tests actually showed, and what deploy-time analysis found."
 date: 2025-03-19
-tags: ["Scalability", "Infrastructure", "DigitalOcean"]
+tags: ["Scalability", "Load Testing", "Infrastructure"]
 order: 5
 ---
 
 <Callout type="problem">
-UFT runs on a single Dockerized VPS today, sized for the traffic it currently sees (~1,700 tracked users). A spectator-facing product is inherently spikier than an admin dashboard — usage concentrates around live matches — and that's a different load shape than what the current infrastructure has been tested against.
+UFT runs on a single DigitalOcean droplet hosting Postgres, the API, NATS, Redis, the social feed service, and live streaming, all together. Spectator traffic around live matches is inherently spikier than steady admin usage, and rather than guess how the current setup holds up, the goal was to actually measure it — connections, join latency, error rate, and where deploys themselves lose time.
 </Callout>
 
 <Callout type="alternatives">
-Pending — this is honestly the most forward-looking case study: what would break first under more load, and what options exist (horizontal scaling, a CDN/edge layer for spectator reads, separating the realtime path from the REST API) is something I'm still actively evaluating rather than something already solved.
+There wasn't a formal architecture comparison here — this is a measurement-first case study, not an architecture-options one. The real decision was in *how* to measure: an initial attempt used a generic load-testing tool (k6) that connected to the wrong Socket.io namespace, produced zero visible backend activity, and looked like a total failure. Rather than trust that signal, the fix was writing load-test scripts in Node using the exact same `socket.io-client` library the real frontend uses, so the test traffic is indistinguishable from real traffic at the protocol level.
 </Callout>
 
 <Callout type="decision">
-Pending — I'd rather document this honestly once I've actually made and validated a decision than present speculative architecture as done work.
+Built tiered, purpose-specific load scripts instead of one generic test: a single-match scenario, a 4-simultaneous-match scenario, and an "all live matches dashboard" scenario (where one user joins every currently-live match's room at once, mimicking the public dashboard). Each scales through light/medium/heavy/stress tiers (10/25/50/100 spectators per match). Separately, deploy time itself was measured rather than assumed acceptable: a self-authored root-cause analysis broke a 20–45 minute deploy down phase by phase.
 </Callout>
 
 <Callout type="tradeoffs">
-Pending.
+Hand-rolled load scripts take more upkeep than an off-the-shelf tool, but they're the only thing that told the truth here — the generic tool's false negative would have sent the investigation in the wrong direction. On the deploy side, the fast fix (stop deleting Docker's build cache and forcing a `--no-cache` frontend rebuild on every single deploy) is identified and estimated to save the largest chunk of the 20–45 minutes, but it hasn't been applied yet — that's a real, open trade-off between "documented" and "done."
 </Callout>
 
 <Callout type="result">
-Pending.
+Connection tests: 100% of spectators connected and joined their match room successfully, 0 errors. But average connection time was ~3.9 seconds and average join-room time ~1.9 seconds — against the team's own stated benchmark (under 500ms as "ideal"), that's honestly labeled "high," not acceptable. Separately, targeted concurrency tests (not load tests — integration-level) validated 100+ spectators in a single room and 10+ simultaneous matches with clean room isolation, mass disconnects, and fast reconnection, all passing. On deploys: the 20–45 minute figure was broken down to roughly 12–25 minutes just for the frontend build, caused by deleting the previous image and disabling the build cache before every deploy.
 </Callout>
 
 <Callout type="lessons">
-Pending.
+Correctness was validated (0 errors, no cross-room leakage, tests passing at 100+ concurrent spectators) before latency was — a defensible order, but "it works" and "it's fast" are genuinely different bars, and the ~3.9s connection time is the honest gap between them right now. The load-testing story itself is a lesson: a general-purpose tool that doesn't match your actual client can produce a confident, wrong signal — testing with the real client library is what turned "seems broken" into "here's the actual number, and here's the target it's missing."
 </Callout>

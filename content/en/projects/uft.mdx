@@ -1,9 +1,9 @@
 ---
 title: "Ultimate Frisbee Tracker (UFT)"
-description: "A real-time tournament management platform — NestJS, PostgreSQL, and NATS JetStream, live in production since March 2025."
+description: "A tournament management system — NestJS, PostgreSQL, NATS JetStream, live scorekeeping, and a live-streaming layer — in production since March 2025."
 date: 2025-03-19
 image: "/projects/uft-platform.png"
-tags: ["NestJS", "PostgreSQL", "NATS JetStream", "RBAC", "React", "React Native", "TypeScript", "Docker", "DigitalOcean"]
+tags: ["NestJS", "PostgreSQL", "NATS JetStream", "RBAC", "Socket.io", "React", "React Native", "TypeScript", "Docker", "DigitalOcean"]
 published: true
 featured: true
 projectUrl: "https://uftracker.com"
@@ -21,46 +21,47 @@ metrics: ["~1,700 users", "49 DB entities", "Live since Mar 2025", "NATS JetStre
 
 ## Overview
 
-UFT is a platform for running Ultimate Frisbee tournaments: registrations, tournament management, live scorekeeping, and real-time statistics, used by organizers and spectators during actual events. It's been in production since March 19, 2025, currently tracking around 1,700 users through Google Analytics.
+UFT is a system for running Ultimate Frisbee tournaments: registrations, tournament automation, live scorekeeping, statistics, spirit-of-the-game scoring, a social feed, and live spectator streaming — used by organizers, scorekeepers, coaches, and spectators during real events, across 13 role-scoped portals covering the sport's own hierarchy (federation → league → club → team → player). It's been in production since March 19, 2025, currently tracking around 1,700 users through Google Analytics.
 
 ## Why I built it
 
-Tournament scorekeeping is often manual and fragmented — spreadsheets, group chats, paper. That's slow to update and easy to get wrong, and it gives spectators nothing to follow along with in real time. UFT exists to make live tournament data (scores, standings, statistics) correct and immediately visible, for the people running the event and the people watching it.
+Tournament scorekeeping is often manual and fragmented — spreadsheets, group chats, paper. That's slow to update and easy to get wrong, and it gives spectators nothing to follow along with in real time. UFT exists to make live tournament data — scores, standings, statistics — correct and immediately visible, for the people running the event and the people watching it, whether they're in the room or watching a live stream.
 
 ## Architecture
 
-UFT is a NestJS API backed by PostgreSQL, with NATS JetStream as an event backbone connecting the parts of the system that need to react to state changes without blocking the request path. The full breakdown — system diagram, backend structure, database design, and deployment topology — lives in [Engineering](/engineering); this section stays focused on the product.
+UFT is a small system, not a single API: a NestJS backend (32 feature modules) owns the tournament domain, a separate NestJS microservice owns the social feed with its own database and Redis cache, and NATS JetStream connects the two so the social feed can be down without touching live scorekeeping. A React web app, an Expo/React Native mobile app used in the field, and an nginx-rtmp live-streaming layer round out the system. The full breakdown — diagrams, module list, database design — lives in [Engineering](/engineering); this section stays focused on the product.
 
 ## Technical challenges
 
-The three hardest problems in building UFT so far:
+The hardest problems in building UFT so far:
 
-- **Realtime scorekeeping** with more than one person able to record a score for the same match — see [Designing realtime scorekeeping](/case-studies/realtime-scorekeeping).
-- **Recomputing standings** fast enough that it doesn't compete with the live-scoring request path — see [Optimizing tournament standings](/case-studies/tournament-standings-optimization).
-- **Access control** across organizers, scorekeepers, and admins acting on the same tournament — see [RBAC implementation](/case-studies/rbac-implementation).
+- **Realtime scorekeeping** with Ultimate's own rules (breaks, Callahans, mixed-division gender ratios) enforced live, across scorekeeper and spectator clients at once — see [Designing realtime scorekeeping](/case-studies/realtime-scorekeeping).
+- **Configurable tournament formats** — round robin, single elimination, groups-into-elimination, and custom ranking brackets — instead of hardcoding one format per tournament type — see [Optimizing tournament standings and bracket generation](/case-studies/tournament-standings-optimization).
+- **Access control** across 13 role-scoped portals, including cleaning up role names that drifted across two different seeders — see [RBAC implementation](/case-studies/rbac-implementation).
 
 ## Engineering decisions
 
-The event-driven layer (NATS JetStream) is the decision with the most downstream effect on the rest of the system — see [Event-driven architecture using NATS](/case-studies/event-driven-architecture-nats) for why it's there and what it actually carries.
+The event-driven layer (NATS JetStream) is the decision with the most downstream effect on the rest of the system — see [Event-driven architecture using NATS](/case-studies/event-driven-architecture-nats) for why it's there, and an honest account of which parts of that design are actually wired up today versus just declared.
 
 ## Current infrastructure
 
-Dockerized services behind Nginx, deployed on a DigitalOcean VPS. Simple, deliberately — the trade-offs of that choice are covered honestly in [Scaling realtime spectators](/case-studies/scaling-realtime-spectators), including what isn't solved yet.
+Docker Compose runs Postgres, the API, NATS, Redis, the social feed service, live streaming, and automated nightly backups (7-day retention), all on one DigitalOcean droplet running staging and production side by side. CI/CD via GitHub Actions gates every deploy on backend and frontend test suites passing, with commit-tag-based selective deploys.
 
 ## Performance
 
-No formal benchmarks published yet. The only production signal I have today is Google Analytics usage data (~1,700 tracked users) — real load-testing numbers are on the list, not invented for this page.
+Measured, not assumed: a hand-written load test (using the same `socket.io-client` the frontend uses) found 100% connection/join success and 0 errors, but average connection time around 3.9 seconds — which the team's own benchmark rates "high" against a 500ms target. Separately, deploys were measured too: a self-authored analysis found they take 20–45 minutes, mostly from rebuilding the frontend without any build cache on every single deploy. Full numbers and the fix list in [Scaling realtime spectators](/case-studies/scaling-realtime-spectators).
 
 ## Scalability
 
-The current single-VPS setup is sized for today's traffic, not spectator-scale spikes around live matches. What would need to change first is covered in [Scaling realtime spectators](/case-studies/scaling-realtime-spectators).
+Targeted concurrency tests validate 100+ spectators in one room and 10+ simultaneous matches with clean room isolation — the correctness story holds. The latency story doesn't yet: connection times are real headroom, not a solved problem, and the single-droplet setup hasn't been load-tested against a genuine spectator-scale spike. What's next is in [Scaling realtime spectators](/case-studies/scaling-realtime-spectators).
 
 ## Lessons learned
 
-Being written up case-study by case-study as I document each decision properly — see [Case Studies](/case-studies) for the ones published so far, and [Learning](/learning) for how this stays updated.
+Being written up case-study by case-study, honestly — including the parts that aren't finished yet. See [Case Studies](/case-studies) for the ones published so far, and [Learning](/learning) for how this stays updated.
 
 ## Future improvements
 
-- Finish the React Native spectator app.
-- Add structured logging / basic APM (see the gap noted in [Skills → Observability](/skills)).
-- Formal load testing ahead of a spectator-traffic push.
+- Cut deploy time by fixing the frontend build-cache issue identified in the deploy-time analysis.
+- Close the two remaining upload endpoints flagged as open in the July 2026 security review.
+- Wire up the two NATS event subjects that are declared but not yet published.
+- Bring connection/join latency down toward the team's own "ideal" benchmark.

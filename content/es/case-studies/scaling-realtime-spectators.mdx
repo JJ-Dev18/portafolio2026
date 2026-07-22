@@ -1,31 +1,31 @@
 ---
 title: "Escalando espectadores en tiempo real"
-description: "Qué le pasa a la infraestructura actual de UFT cuando el tráfico de espectadores crece más allá de lo que ve hoy."
+description: "Medir honestamente la infraestructura de tiempo real de UFT — qué mostraron realmente las pruebas de carga, y qué encontró el análisis de tiempos de despliegue."
 date: 2025-03-19
-tags: ["Escalabilidad", "Infraestructura", "DigitalOcean"]
+tags: ["Escalabilidad", "Pruebas de carga", "Infraestructura"]
 order: 5
 ---
 
 <Callout type="problem">
-UFT corre hoy sobre un único VPS dockerizado, dimensionado para el tráfico que ve actualmente (~1,700 usuarios registrados). Un producto orientado a espectadores es inherentemente más picudo que un dashboard administrativo — el uso se concentra alrededor de los partidos en vivo — y esa es una forma de carga distinta a la que se ha probado la infraestructura actual.
+UFT corre en un único droplet de DigitalOcean que aloja Postgres, la API, NATS, Redis, el servicio de feed social, y streaming en vivo, todo junto. El tráfico de espectadores alrededor de partidos en vivo es inherentemente más picudo que el uso administrativo estable, y en vez de adivinar cómo se sostiene el setup actual, el objetivo fue medirlo de verdad — conexiones, latencia de unión a sala, tasa de error, y dónde los propios despliegues pierden tiempo.
 </Callout>
 
 <Callout type="alternatives">
-Pendiente — este es honestamente el case study más prospectivo: qué se rompería primero con más carga, y qué opciones existen (escalado horizontal, una capa CDN/edge para lecturas de espectadores, separar el camino de tiempo real de la API REST) es algo que todavía estoy evaluando activamente, no algo ya resuelto.
+Acá no hubo una comparación formal de arquitectura — este es un case study centrado en medir primero, no en opciones de arquitectura. La decisión real estuvo en *cómo* medir: un primer intento usó una herramienta de carga genérica (k6) que se conectó al namespace equivocado de Socket.io, no produjo actividad visible en el backend, y parecía un fracaso total. En vez de confiar en esa señal, el arreglo fue escribir scripts de carga en Node usando exactamente la misma librería `socket.io-client` que usa el frontend real, así el tráfico de prueba es indistinguible del tráfico real a nivel de protocolo.
 </Callout>
 
 <Callout type="decision">
-Pendiente — prefiero documentar esto honestamente una vez que realmente haya tomado y validado una decisión, en vez de presentar arquitectura especulativa como trabajo terminado.
+Se construyeron scripts de carga por niveles y específicos por propósito en vez de un solo test genérico: un escenario de partido único, un escenario de 4 partidos simultáneos, y un escenario de "dashboard de todos los partidos en vivo" (donde un usuario se une a la sala de cada partido actualmente en vivo a la vez, imitando el dashboard público). Cada uno escala en niveles ligero/medio/pesado/estrés (10/25/50/100 espectadores por partido). Por separado, se midió el tiempo de despliegue en sí en vez de asumir que era aceptable: un análisis propio de causa raíz desglosó un despliegue de 20–45 minutos fase por fase.
 </Callout>
 
 <Callout type="tradeoffs">
-Pendiente.
+Los scripts de carga hechos a mano requieren más mantenimiento que una herramienta lista para usar, pero fueron lo único que dijo la verdad acá — el falso negativo de la herramienta genérica habría llevado la investigación en la dirección equivocada. Del lado del despliegue, el arreglo rápido (dejar de borrar el caché de build de Docker y de forzar un rebuild del frontend sin caché en cada despliegue) está identificado y se estima que ahorraría la mayor parte de los 20–45 minutos, pero todavía no se aplicó — ese es un trade-off real y abierto entre "documentado" y "hecho".
 </Callout>
 
 <Callout type="result">
-Pendiente.
+Tests de conexión: 100% de los espectadores se conectaron y se unieron a la sala de su partido exitosamente, 0 errores. Pero el tiempo promedio de conexión fue de ~3.9 segundos y el de unión a sala de ~1.9 segundos — contra el benchmark propio del equipo (menos de 500ms como "ideal"), eso se etiqueta honestamente como "alto", no aceptable. Por separado, tests de concurrencia dirigidos (no de carga — a nivel de integración) validaron 100+ espectadores en una sola sala y 10+ partidos simultáneos con aislamiento de sala limpio, desconexiones masivas, y reconexión rápida, todos pasando. En despliegues: la cifra de 20–45 minutos se desglosó en cerca de 12–25 minutos solo para el build del frontend, causado por borrar la imagen anterior y deshabilitar el caché de build antes de cada despliegue.
 </Callout>
 
 <Callout type="lessons">
-Pendiente.
+La corrección se validó (0 errores, sin filtración entre salas, tests pasando con 100+ espectadores concurrentes) antes que la latencia — un orden defendible, pero "funciona" y "es rápido" son barras genuinamente distintas, y el tiempo de conexión de ~3.9s es la brecha honesta entre ambas ahora mismo. La historia de las pruebas de carga en sí es una lección: una herramienta de propósito general que no coincide con tu cliente real puede producir una señal confiada pero equivocada — probar con la librería cliente real fue lo que convirtió "parece roto" en "acá está el número real, y acá está el objetivo que no está cumpliendo".
 </Callout>

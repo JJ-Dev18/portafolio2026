@@ -5,47 +5,50 @@ description: "Tecnologías agrupadas por dominio, con el uso real que les di —
 
 ## Backend
 
-- **NestJS** — la capa de API de UFT y Voopy: separación de dominios por módulos, endpoints REST, guards para RBAC.
+- **NestJS** — la API principal de UFT (32 módulos de dominio) y su microservicio separado `social-bff` para el feed social, además de la API de Voopy: separación de dominios por módulos, endpoints REST, guards para RBAC.
 - **Laravel** — reconstruí la plataforma educativa de Sigaweb sobre Laravel con multi-tenancy, y migré un despliegue Laravel más antiguo de CentOS a Docker.
 - **Java / Spring** — API REST para una plataforma de reservas de hospedaje (Digital Booking), construida como parte de un equipo Scrum.
 
 ## Frontend
 
-- **React** — dashboards administrativos y públicos de UFT, además de los dashboards por rol de Sigaweb (estudiante, docente, admin, super-admin).
+- **React** — dashboards administrativos y de organizador de UFT, además de los dashboards por rol de Sigaweb (estudiante, docente, admin, super-admin).
 - **Next.js** — el módulo de e-commerce de Fleed Shop y el frontend web de Voopy, ambos con App Router.
 - **TypeScript** — el default en todos los proyectos anteriores; modo estricto donde el codebase lo permite.
-- **React Native** — la app de espectadores de UFT, en desarrollo en paralelo a la plataforma web.
+- **React Native (Expo)** — la app de campo de UFT: scorekeeping con soporte offline para uso en el lugar, más dashboards específicos por rol (coach, admin de club, presidente de liga).
 
 ## Bases de Datos
 
-- **PostgreSQL** — almacenamiento principal de UFT (49 entidades en producción) y Voopy, vía TypeORM.
+- **PostgreSQL** — almacenamiento principal de UFT (49 entidades entre su API principal y su servicio de feed social) y Voopy, vía TypeORM.
 - **MySQL** — Digital Booking y el stack de Sigaweb antes de la migración.
+- **Redis** — capa de caché del servicio de feed social de UFT.
 
 ## Cloud
 
-- **DigitalOcean** — VPS de producción de UFT.
+- **DigitalOcean** — droplet de producción de UFT, corriendo staging y producción en paralelo.
 - **AWS** — destino de despliegue de Digital Booking durante el proyecto de bootcamp.
 
 ## Arquitectura
 
-- **Diseño orientado a eventos** — NATS JetStream desacopla el registro de puntajes de UFT del recálculo de estadísticas/posiciones.
-- **RBAC** — control de acceso basado en roles que determina qué pueden hacer anotadores, organizadores y admins en UFT.
+- **Diseño orientado a eventos** — NATS JetStream desacopla el feed social de UFT de las escrituras principales de partidos/inscripciones, con un consumer durable y con ack explícito del lado receptor.
+- **RBAC** — 13 portales por rol en UFT, incluyendo una capa de alias de rol para corregir la desalineación de nombres de un sembrado inicial inconsistente, y una revisión de seguridad que encontró y corrigió una ruta real de escalada de privilegios.
 - **Multi-tenancy** — Sigaweb sirve a múltiples instituciones desde un solo despliegue.
 
 ## DevOps
 
 - **Docker** — todos los proyectos actuales (UFT, Sigaweb, Voopy) se despliegan como contenedores; el proyecto de migración de Sigaweb fue específicamente sobre mover un despliegue legacy en CentOS hacia Docker.
-- **Nginx** — reverse proxy y terminación TLS frente a UFT y el stack migrado de Sigaweb.
-- **CI/CD** — parte de la migración de infraestructura de Sigaweb.
+- **Nginx** — reverse proxy y terminación TLS frente a UFT y el stack migrado de Sigaweb; también da la cara al servicio de streaming en vivo RTMP/HLS de UFT.
+- **CI/CD** — GitHub Actions condicionando los despliegues de UFT a que pasen las suites de tests de backend y frontend, con despliegues selectivos por tag de commit; medí y documenté por qué los despliegues tomaban entre 20 y 45 minutos en vez de asumir que el pipeline estaba bien.
 
 ## Testing
 
+- **Jest** — el backend de UFT tiene números reales detrás, no solo "hay tests": 83 tests de websockets con más de 90% de cobertura en rutas críticas de tiempo real, tests de concurrencia dedicados (100+ espectadores/sala, 10+ partidos simultáneos), y tests de caracterización que detectaron un bug real de deduplicación durante un refactor de frontend.
 - **Jest, Selenium, Postman** — testing unitario, end-to-end y de API en Digital Booking, construido con un equipo Scrum a lo largo de cuatro sprints.
 
 ## Observabilidad
 
-- **Google Analytics** — la única instrumentación que tiene UFT hoy; así se mide la cifra de ~1,700 usuarios. Logging estructurado y APM todavía no están implementados — ese vacío se reconoce honestamente en [Ingeniería](/engineering), no se oculta.
+- **Google Analytics** — la instrumentación de uso de UFT; así se mide la cifra de ~1,700 usuarios. Logging estructurado y APM todavía no están implementados — una revisión de seguridad de julio de 2026 incluso encontró contraseñas filtrándose en logs, ya corregido, pero es una señal honesta de que las herramientas de observabilidad están por detrás de donde deberían estar.
 
 ## Tiempo real
 
-- **NATS JetStream** — la columna vertebral de eventos detrás del scorekeeping y las estadísticas en vivo de UFT, cubierto en detalle en [Case Studies](/case-studies).
+- **NATS JetStream** — la columna vertebral de eventos que conecta la API principal de UFT con su servicio de feed social, cubierto en detalle en [Case Studies](/case-studies).
+- **Socket.io** — el scorekeeping en vivo y las notificaciones de UFT, con reglas de dominio propias de Ultimate (detección de break, validación de Callahan, reglas de división mixta) impuestas a medida que llegan los eventos.

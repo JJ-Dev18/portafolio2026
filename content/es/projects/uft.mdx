@@ -1,9 +1,9 @@
 ---
 title: "Ultimate Frisbee Tracker (UFT)"
-description: "Una plataforma de gestión de torneos en tiempo real — NestJS, PostgreSQL y NATS JetStream, en producción desde marzo de 2025."
+description: "Un sistema de gestión de torneos — NestJS, PostgreSQL, NATS JetStream, scorekeeping en vivo, y una capa de streaming en vivo — en producción desde marzo de 2025."
 date: 2025-03-19
 image: "/projects/uft-platform.png"
-tags: ["NestJS", "PostgreSQL", "NATS JetStream", "RBAC", "React", "React Native", "TypeScript", "Docker", "DigitalOcean"]
+tags: ["NestJS", "PostgreSQL", "NATS JetStream", "RBAC", "Socket.io", "React", "React Native", "TypeScript", "Docker", "DigitalOcean"]
 published: true
 featured: true
 projectUrl: "https://uftracker.com"
@@ -21,46 +21,47 @@ metrics: ["~1,700 usuarios", "49 entidades en BD", "En vivo desde mar 2025", "NA
 
 ## Overview
 
-UFT es una plataforma para operar torneos de Ultimate Frisbee: inscripciones, gestión de torneos, scorekeeping en vivo y estadísticas en tiempo real, usada por organizadores y espectadores durante eventos reales. Está en producción desde el 19 de marzo de 2025, con cerca de 1,700 usuarios registrados vía Google Analytics.
+UFT es un sistema para operar torneos de Ultimate Frisbee: inscripciones, automatización de torneos, scorekeeping en vivo, estadísticas, puntaje de espíritu de juego, un feed social, y streaming en vivo para espectadores — usado por organizadores, anotadores, coaches y espectadores durante eventos reales, a través de 13 portales por rol que cubren la propia jerarquía del deporte (federación → liga → club → equipo → jugador). Está en producción desde el 19 de marzo de 2025, con cerca de 1,700 usuarios registrados vía Google Analytics.
 
 ## Por qué lo construí
 
-El scorekeeping de torneos suele ser manual y fragmentado — hojas de cálculo, chats grupales, papel. Eso es lento de actualizar y fácil de hacer mal, y no le da a los espectadores nada que seguir en tiempo real. UFT existe para que los datos en vivo del torneo (puntajes, posiciones, estadísticas) sean correctos e inmediatamente visibles, tanto para quienes organizan el evento como para quienes lo ven.
+El scorekeeping de torneos suele ser manual y fragmentado — hojas de cálculo, chats grupales, papel. Eso es lento de actualizar y fácil de hacer mal, y no le da a los espectadores nada que seguir en tiempo real. UFT existe para que los datos en vivo del torneo — puntajes, posiciones, estadísticas — sean correctos e inmediatamente visibles, tanto para quienes organizan el evento como para quienes lo ven, ya sea en el lugar o siguiendo un stream en vivo.
 
 ## Arquitectura
 
-UFT es una API en NestJS respaldada por PostgreSQL, con NATS JetStream como columna vertebral de eventos que conecta las partes del sistema que necesitan reaccionar a cambios de estado sin bloquear el camino del request. El desglose completo — diagrama del sistema, estructura del backend, diseño de base de datos y topología de despliegue — vive en [Ingeniería](/engineering); esta sección se mantiene enfocada en el producto.
+UFT es un pequeño sistema, no una sola API: un backend en NestJS (32 módulos de dominio) es dueño del dominio de torneos, un microservicio NestJS separado es dueño del feed social con su propia base de datos y caché en Redis, y NATS JetStream conecta ambos para que el feed social pueda estar caído sin tocar el scorekeeping en vivo. Una web app en React, una app móvil en Expo/React Native usada en campo, y una capa de streaming en vivo con nginx-rtmp completan el sistema. El desglose completo — diagramas, lista de módulos, diseño de base de datos — vive en [Ingeniería](/engineering); esta sección se mantiene enfocada en el producto.
 
 ## Retos técnicos
 
-Los tres problemas más difíciles al construir UFT hasta ahora:
+Los problemas más difíciles al construir UFT hasta ahora:
 
-- **Scorekeeping en tiempo real** con más de una persona habilitada para registrar un puntaje en el mismo partido — ver [Diseñando el scorekeeping en tiempo real](/case-studies/realtime-scorekeeping).
-- **Recalcular posiciones** lo suficientemente rápido como para no competir con el camino de request de puntajes en vivo — ver [Optimizando las posiciones de torneo](/case-studies/tournament-standings-optimization).
-- **Control de acceso** entre organizadores, anotadores y administradores actuando sobre el mismo torneo — ver [Implementación de RBAC](/case-studies/rbac-implementation).
+- **Scorekeeping en tiempo real** con las reglas propias de Ultimate (breaks, Callahans, proporciones de género en división mixta) impuestas en vivo, a través de clientes de anotador y espectador a la vez — ver [Diseñando el scorekeeping en tiempo real](/case-studies/realtime-scorekeeping).
+- **Formatos de torneo configurables** — round robin, eliminación simple, grupos hacia eliminación, y brackets de ranking personalizados — en vez de codificar un formato fijo por tipo de torneo — ver [Optimizando posiciones y generación de brackets](/case-studies/tournament-standings-optimization).
+- **Control de acceso** a través de 13 portales por rol, incluyendo limpiar nombres de rol que se desalinearon entre dos seeders distintos — ver [Implementación de RBAC](/case-studies/rbac-implementation).
 
 ## Decisiones de ingeniería
 
-La capa orientada a eventos (NATS JetStream) es la decisión con más efecto sobre el resto del sistema — ver [Arquitectura orientada a eventos con NATS](/case-studies/event-driven-architecture-nats) para saber por qué está ahí y qué transporta realmente.
+La capa orientada a eventos (NATS JetStream) es la decisión con más efecto sobre el resto del sistema — ver [Arquitectura orientada a eventos con NATS](/case-studies/event-driven-architecture-nats) para saber por qué está ahí, y un relato honesto de qué partes de ese diseño están realmente conectadas hoy versus solo declaradas.
 
 ## Infraestructura actual
 
-Servicios dockerizados detrás de Nginx, desplegados en un VPS de DigitalOcean. Simple, deliberadamente — los trade-offs de esa elección se cubren honestamente en [Escalando espectadores en tiempo real](/case-studies/scaling-realtime-spectators), incluyendo lo que todavía no está resuelto.
+Docker Compose corre Postgres, la API, NATS, Redis, el servicio de feed social, streaming en vivo, y backups automáticos nocturnos (retención de 7 días), todo en un mismo droplet de DigitalOcean que corre staging y producción en paralelo. El CI/CD vía GitHub Actions condiciona cada despliegue a que las suites de tests de backend y frontend pasen, con despliegues selectivos basados en tags de commit.
 
 ## Rendimiento
 
-Todavía no hay benchmarks formales publicados. La única señal de producción que tengo hoy son los datos de uso de Google Analytics (~1,700 usuarios registrados) — números reales de pruebas de carga están en la lista, no inventados para esta página.
+Medido, no asumido: un test de carga escrito a mano (usando el mismo `socket.io-client` que usa el frontend) encontró 100% de éxito en conexión/unión y 0 errores, pero un tiempo promedio de conexión de cerca de 3.9 segundos — que el benchmark propio del equipo califica como "alto" contra un objetivo de 500ms. Por separado, también se midieron los despliegues: un análisis propio encontró que toman entre 20 y 45 minutos, sobre todo por reconstruir el frontend sin ningún caché de build en cada despliegue. Números completos y lista de arreglos en [Escalando espectadores en tiempo real](/case-studies/scaling-realtime-spectators).
 
 ## Escalabilidad
 
-El setup actual de un solo VPS está dimensionado para el tráfico de hoy, no para picos de tráfico de espectadores alrededor de partidos en vivo. Qué necesitaría cambiar primero se cubre en [Escalando espectadores en tiempo real](/case-studies/scaling-realtime-spectators).
+Tests de concurrencia dirigidos validan 100+ espectadores en una sala y 10+ partidos simultáneos con aislamiento de sala limpio — la historia de corrección se sostiene. La historia de latencia todavía no: los tiempos de conexión son margen real de mejora, no un problema resuelto, y el setup de un solo droplet no se ha probado contra un pico genuino de escala de espectadores. Lo que sigue está en [Escalando espectadores en tiempo real](/case-studies/scaling-realtime-spectators).
 
 ## Lecciones aprendidas
 
-Se están escribiendo case study por case study a medida que documento cada decisión correctamente — ver [Case Studies](/case-studies) para los ya publicados, y [Aprendizaje](/learning) para cómo se mantiene esto actualizado.
+Se están escribiendo case study por case study, honestamente — incluyendo las partes que todavía no están terminadas. Ver [Case Studies](/case-studies) para los ya publicados, y [Aprendizaje](/learning) para cómo se mantiene esto actualizado.
 
 ## Próximas mejoras
 
-- Terminar la app de espectadores en React Native.
-- Agregar logging estructurado / APM básico (ver el vacío señalado en [Habilidades → Observabilidad](/skills)).
-- Pruebas de carga formales antes de un empuje de tráfico de espectadores.
+- Reducir el tiempo de despliegue arreglando el problema de caché de build del frontend identificado en el análisis de tiempos de despliegue.
+- Cerrar los dos endpoints de subida de archivos que quedaron marcados como abiertos en la revisión de seguridad de julio de 2026.
+- Conectar los dos subjects de NATS que están declarados pero todavía no se publican.
+- Bajar la latencia de conexión/unión hacia el benchmark "ideal" propio del equipo.

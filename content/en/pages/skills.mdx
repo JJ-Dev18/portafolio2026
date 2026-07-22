@@ -1,0 +1,51 @@
+---
+title: "Skills"
+description: "Technologies grouped by domain, with what I actually used them for — not a badge wall."
+---
+
+## Backend
+
+- **NestJS** — the API layer for UFT and Voopy: module-based domain separation, REST endpoints, guards for RBAC.
+- **Laravel** — rebuilt Sigaweb's education platform on Laravel with multi-tenancy, and migrated an older Laravel deployment from CentOS to Docker.
+- **Java / Spring** — REST API for a hotel-booking platform (Digital Booking), built as part of a Scrum team.
+
+## Frontend
+
+- **React** — admin and public dashboards for UFT, plus Sigaweb's role-based dashboards (student, teacher, admin, super-admin).
+- **Next.js** — Fleed Shop's e-commerce module and Voopy's web frontend, both App Router.
+- **TypeScript** — the default across every project above; strict mode where the codebase allows it.
+- **React Native** — UFT's spectator app, in progress alongside the web platform.
+
+## Databases
+
+- **PostgreSQL** — primary datastore for UFT (49 entities in production) and Voopy, via TypeORM.
+- **MySQL** — Digital Booking and the pre-migration Sigaweb stack.
+
+## Cloud
+
+- **DigitalOcean** — UFT's production VPS.
+- **AWS** — Digital Booking's deployment target during the bootcamp project.
+
+## Architecture
+
+- **Event-driven design** — NATS JetStream decouples UFT's score-recording path from statistics/standings recomputation.
+- **RBAC** — role-based access control gating what scorekeepers, organizers, and admins can each do in UFT.
+- **Multi-tenancy** — Sigaweb serves multiple institutions from one deployment.
+
+## DevOps
+
+- **Docker** — every current project (UFT, Sigaweb, Voopy) ships as containers; the Sigaweb migration project was specifically about moving a legacy CentOS deployment into Docker.
+- **Nginx** — reverse proxy and TLS termination in front of UFT and the migrated Sigaweb stack.
+- **CI/CD** — part of the Sigaweb infrastructure migration.
+
+## Testing
+
+- **Jest, Selenium, Postman** — unit, end-to-end, and API testing on Digital Booking, built with a Scrum team over four sprints.
+
+## Observability
+
+- **Google Analytics** — the only instrumentation UFT has today; it's how the ~1,700-user figure is measured. Structured logging and proper APM aren't in place yet — that gap is tracked honestly in [Engineering](/engineering), not hidden.
+
+## Realtime
+
+- **NATS JetStream** — the event backbone behind UFT's live scorekeeping and statistics, covered in detail in [Case Studies](/case-studies).

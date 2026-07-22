@@ -1,6 +1,5 @@
 import { allProjects } from "contentlayer/generated";
 import { notFound } from "next/navigation";
-import { Header } from "@/components/sections/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar } from "lucide-react";
@@ -34,7 +33,7 @@ export async function generateMetadata({ params }: ProjectPageProps) {
   }
 
   return {
-    title: `${project.title} | Juan Murillo`,
+    title: project.title,
     description: project.description,
     keywords: project.tags,
     alternates: {
@@ -79,12 +78,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   return (
-    <>
-      <Header />
-      <main className="w-full">
-        <article className="max-w-4xl mx-auto px-4 py-16 md:py-24">
-          {/* Back Button */}
-          <div className="mb-8">
+    <article className="max-w-4xl mx-auto px-4 py-16 md:py-24">
+      {/* Back Button */}
+      <div className="mb-8">
             <Button variant="ghost" asChild>
               <Link href={`/${lang}/projects`}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
@@ -157,12 +153,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </div>
           </header>
 
-          {/* Project Content */}
-          <div className="prose prose-slate dark:prose-invert max-w-none">
-            <MDXContent code={project.body.code} />
-          </div>
-        </article>
-      </main>
-    </>
+      {/* Project Content */}
+      <div className="prose prose-slate dark:prose-invert max-w-none">
+        <MDXContent code={project.body.code} />
+      </div>
+    </article>
   );
 }

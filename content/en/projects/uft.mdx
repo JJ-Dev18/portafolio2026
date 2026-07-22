@@ -1,64 +1,66 @@
 ---
-title: "UFT – Ultimate Frisbee Tournament Platform"
-description: "Full-stack platform to manage, score, and track Ultimate Frisbee tournaments in real-time, with live statistics and administration dashboard."
-date: 2026-01-20
+title: "Ultimate Frisbee Tracker (UFT)"
+description: "A real-time tournament management platform — NestJS, PostgreSQL, and NATS JetStream, live in production since March 2025."
+date: 2025-03-19
 image: "/projects/uft-platform.png"
-tags: ["React 18", "NestJS", "React Native", "TypeScript", "Docker", "Nginx", "PostgreSQL", "VPS", "DevOps"]
+tags: ["NestJS", "PostgreSQL", "NATS JetStream", "RBAC", "React", "React Native", "TypeScript", "Docker", "DigitalOcean"]
 published: true
+featured: true
 projectUrl: "https://uftracker.com"
+startDate: "May 2024"
+launchDate: "March 19, 2025"
+metrics: ["~1,700 users", "49 DB entities", "Live since Mar 2025", "NATS JetStream"]
 ---
+
+<StatBar stats={[
+  { value: "May 2024 → Mar 2025", label: "Build to production launch" },
+  { value: "~1,700", label: "Users tracked (Google Analytics)" },
+  { value: "49", label: "Database entities in production" },
+  { value: "NATS JetStream", label: "Event-driven backend" },
+]} />
 
 ## Overview
 
-**UFT** is a full-stack platform built to **manage, score, and track Ultimate Frisbee tournaments in real time**. It unifies tournament administration, live scorekeeping, and player/team statistics into a single experience for organizers and spectators.
+UFT is a platform for running Ultimate Frisbee tournaments: registrations, tournament management, live scorekeeping, and real-time statistics, used by organizers and spectators during actual events. It's been in production since March 19, 2025, currently tracking around 1,700 users through Google Analytics.
 
-In production, UFT supports tournaments with multiple concurrent games while keeping data consistent and visible instantly across dashboards.
+## Why I built it
 
----
+Tournament scorekeeping is often manual and fragmented — spreadsheets, group chats, paper. That's slow to update and easy to get wrong, and it gives spectators nothing to follow along with in real time. UFT exists to make live tournament data (scores, standings, statistics) correct and immediately visible, for the people running the event and the people watching it.
 
-## The Problem
+## Architecture
 
-Many tournaments still depend on manual scorekeeping and fragmented tools (spreadsheets, WhatsApp, PDFs). That usually results in delayed stats, inconsistent data, and low traceability: numbers arrive late, get duplicated, or get lost, and fans don’t get a compelling live experience.
+UFT is a NestJS API backed by PostgreSQL, with NATS JetStream as an event backbone connecting the parts of the system that need to react to state changes without blocking the request path. The full breakdown — system diagram, backend structure, database design, and deployment topology — lives in [Engineering](/engineering); this section stays focused on the product.
 
-The outcome is **poor data quality**, **slow reporting**, and **limited fan engagement**, plus unnecessary operational friction for organizers.
+## Technical challenges
 
----
+The three hardest problems in building UFT so far:
 
-## The Solution
+- **Realtime scorekeeping** with more than one person able to record a score for the same match — see [Designing realtime scorekeeping](/case-studies/realtime-scorekeeping).
+- **Recomputing standings** fast enough that it doesn't compete with the live-scoring request path — see [Optimizing tournament standings](/case-studies/tournament-standings-optimization).
+- **Access control** across organizers, scorekeepers, and admins acting on the same tournament — see [RBAC implementation](/case-studies/rbac-implementation).
 
-UFT centralizes tournament operations with **real-time score tracking**, **live player and team statistics**, and a dedicated **management dashboard**. It also includes a roadmap for spectator-focused experiences (mobile app in progress) and event/media coverage features aimed at improving engagement.
+## Engineering decisions
 
----
+The event-driven layer (NATS JetStream) is the decision with the most downstream effect on the rest of the system — see [Event-driven architecture using NATS](/case-studies/event-driven-architecture-nats) for why it's there and what it actually carries.
 
-## Technical Architecture
+## Current infrastructure
 
-### Frontend
-The admin and public dashboards are built with **React 18**. The spectator app is being developed with **React Native + TypeScript**. UI consistency and iteration speed come from Tailwind CSS and shadcn/ui.
+Dockerized services behind Nginx, deployed on a DigitalOcean VPS. Simple, deliberately — the trade-offs of that choice are covered honestly in [Scaling realtime spectators](/case-studies/scaling-realtime-spectators), including what isn't solved yet.
 
-### Backend
-The backend is implemented with **NestJS**, exposing a RESTful API and using **PostgreSQL** for reliable persistence and consistency under concurrency.
+## Performance
 
-### Infrastructure
-The platform runs as **dockerized services**, behind an **Nginx** reverse proxy, deployed on a VPS (DigitalOcean). SSL, environment isolation, and a mix of manual and automated backups were set up to support safe production operations.
+No formal benchmarks published yet. The only production signal I have today is Google Analytics usage data (~1,700 tracked users) — real load-testing numbers are on the list, not invented for this page.
 
----
+## Scalability
 
-## My Role
+The current single-VPS setup is sized for today's traffic, not spectator-scale spikes around live matches. What would need to change first is covered in [Scaling realtime spectators](/case-studies/scaling-realtime-spectators).
 
-I led the project end-to-end, from product and UX decisions to full-stack development, infrastructure setup, deployments, and performance optimization. I also supported real tournament operations to validate reliability and usability under real constraints.
+## Lessons learned
 
----
+Being written up case-study by case-study as I document each decision properly — see [Case Studies](/case-studies) for the ones published so far, and [Learning](/learning) for how this stays updated.
 
-## Impact
+## Future improvements
 
-UFT has been used in **multiple tournaments** and supports **live matches with concurrent games**, improving operational speed for organizers. It also provides a strong foundation for scaling into a sports-tech product with trustworthy metrics and better fan experiences.
-
----
-
-## What This Project Shows
-
-This project highlights full-stack system design, DevOps and production deployments, real-user usage, and product thinking driven by real operational needs.
-
----
-
-> UFT represents my ability to **design, build, deploy, and operate** a production-grade platform from zero.
+- Finish the React Native spectator app.
+- Add structured logging / basic APM (see the gap noted in [Skills → Observability](/skills)).
+- Formal load testing ahead of a spectator-traffic push.

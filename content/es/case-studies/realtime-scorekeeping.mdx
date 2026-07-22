@@ -1,0 +1,31 @@
+---
+title: "Diseñando el scorekeeping en tiempo real"
+description: "Mantener a cada anotador, espectador y vista de estadísticas consistente mientras un partido está en vivo."
+date: 2025-03-19
+tags: ["Tiempo real", "Concurrencia", "NestJS", "NATS JetStream"]
+order: 1
+---
+
+<Callout type="problem">
+UFT necesita que los puntajes registrados durante un partido en vivo sean visibles e inmediatamente consistentes en todos los clientes que lo están viendo — dashboards de organizadores, vistas de espectadores y estadísticas en vivo. Varios partidos corren de forma concurrente durante un torneo, y un partido puede tener más de una persona habilitada para registrar un puntaje.
+</Callout>
+
+<Callout type="alternatives">
+Pendiente — esta sección cubrirá los enfoques específicos que evalué (por ejemplo, polling vs. push, single-writer vs. concurrencia optimista) una vez documentado en detalle.
+</Callout>
+
+<Callout type="decision">
+Pendiente — el mecanismo real que usa UFT hoy, escrito con precisión en vez de resumido de memoria.
+</Callout>
+
+<Callout type="tradeoffs">
+Pendiente.
+</Callout>
+
+<Callout type="result">
+Pendiente — cómo se ve esto en producción hoy, con números reales donde existan.
+</Callout>
+
+<Callout type="lessons">
+Pendiente.
+</Callout>

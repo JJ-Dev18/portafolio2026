@@ -1,0 +1,31 @@
+---
+title: "Scaling realtime spectators"
+description: "What happens to UFT's current infrastructure as spectator traffic grows past what it sees today."
+date: 2025-03-19
+tags: ["Scalability", "Infrastructure", "DigitalOcean"]
+order: 5
+---
+
+<Callout type="problem">
+UFT runs on a single Dockerized VPS today, sized for the traffic it currently sees (~1,700 tracked users). A spectator-facing product is inherently spikier than an admin dashboard — usage concentrates around live matches — and that's a different load shape than what the current infrastructure has been tested against.
+</Callout>
+
+<Callout type="alternatives">
+Pending — this is honestly the most forward-looking case study: what would break first under more load, and what options exist (horizontal scaling, a CDN/edge layer for spectator reads, separating the realtime path from the REST API) is something I'm still actively evaluating rather than something already solved.
+</Callout>
+
+<Callout type="decision">
+Pending — I'd rather document this honestly once I've actually made and validated a decision than present speculative architecture as done work.
+</Callout>
+
+<Callout type="tradeoffs">
+Pending.
+</Callout>
+
+<Callout type="result">
+Pending.
+</Callout>
+
+<Callout type="lessons">
+Pending.
+</Callout>

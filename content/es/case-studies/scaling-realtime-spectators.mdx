@@ -1,0 +1,31 @@
+---
+title: "Escalando espectadores en tiempo real"
+description: "Qué le pasa a la infraestructura actual de UFT cuando el tráfico de espectadores crece más allá de lo que ve hoy."
+date: 2025-03-19
+tags: ["Escalabilidad", "Infraestructura", "DigitalOcean"]
+order: 5
+---
+
+<Callout type="problem">
+UFT corre hoy sobre un único VPS dockerizado, dimensionado para el tráfico que ve actualmente (~1,700 usuarios registrados). Un producto orientado a espectadores es inherentemente más picudo que un dashboard administrativo — el uso se concentra alrededor de los partidos en vivo — y esa es una forma de carga distinta a la que se ha probado la infraestructura actual.
+</Callout>
+
+<Callout type="alternatives">
+Pendiente — este es honestamente el case study más prospectivo: qué se rompería primero con más carga, y qué opciones existen (escalado horizontal, una capa CDN/edge para lecturas de espectadores, separar el camino de tiempo real de la API REST) es algo que todavía estoy evaluando activamente, no algo ya resuelto.
+</Callout>
+
+<Callout type="decision">
+Pendiente — prefiero documentar esto honestamente una vez que realmente haya tomado y validado una decisión, en vez de presentar arquitectura especulativa como trabajo terminado.
+</Callout>
+
+<Callout type="tradeoffs">
+Pendiente.
+</Callout>
+
+<Callout type="result">
+Pendiente.
+</Callout>
+
+<Callout type="lessons">
+Pendiente.
+</Callout>

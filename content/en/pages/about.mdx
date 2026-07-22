@@ -1,0 +1,21 @@
+---
+title: "About"
+description: "Backend engineer, formerly full-stack — why I made the shift, and what I care about when building systems."
+---
+
+## From full-stack to backend
+
+I started as a full-stack developer — React and Laravel on a hotel-booking platform, a Next.js/Stripe e-commerce module for a UK client, a full front-end rebuild of a legacy .NET education platform. Full-stack work taught me how a product holds together end to end: what the UI actually needs from an API, where a database schema constrains what a frontend can do, where deployment decisions show up as user-facing latency.
+
+Building Ultimate Frisbee Tracker (UFT) pulled me toward the backend side of that equation. Realtime scorekeeping, tournament standings, and an event-driven layer on NATS JetStream are backend problems first — the frontend is a consumer of decisions made further down the stack. That's the work I want to keep doing.
+
+## What I care about
+
+- **Data models that match how the domain actually behaves**, not the easiest shape to query today.
+- **Systems that stay correct under concurrency** — multiple scorekeepers, multiple devices, one source of truth.
+- **Boring infrastructure.** Docker on a VPS over managed-platform lock-in, when I'm the one who has to operate it.
+- **Documenting the decision, not just the code.** The Engineering and Case Studies sections exist because the reasoning behind a choice is worth more than the diff that implements it.
+
+## Right now
+
+I'm building and operating UFT in production — about 1,700 users tracked through Google Analytics, live since March 2025 — and writing up the engineering decisions behind it as I go.

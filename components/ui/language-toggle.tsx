@@ -12,8 +12,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const languages = [
-  { code: "es", name: "Español", flag: "🇪🇸" },
   { code: "en", name: "English", flag: "🇺🇸" },
+  { code: "es", name: "Español", flag: "🇪🇸" },
 ];
 
 export function LanguageToggle() {
@@ -27,8 +27,6 @@ export function LanguageToggle() {
     const newPathname = pathname.replace(`/${currentLang}`, `/${newLang}`);
     router.push(newPathname);
   };
-
-  const currentLanguage = languages.find((lang) => lang.code === currentLang);
 
   return (
     <DropdownMenu>

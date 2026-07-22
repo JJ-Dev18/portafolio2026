@@ -3,9 +3,6 @@ import type { NextRequest } from "next/server";
 import { locales, defaultLocale } from "@/i18n/config";
 
 function getLocale(request: NextRequest): string {
-  // Check if there's a locale in the pathname
-  const pathname = request.nextUrl.pathname;
-  
   // Check accept-language header
   const acceptLanguage = request.headers.get('accept-language');
   

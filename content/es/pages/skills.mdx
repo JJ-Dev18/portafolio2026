@@ -1,0 +1,51 @@
+---
+title: "Habilidades"
+description: "Tecnologías agrupadas por dominio, con el uso real que les di — no una pared de badges."
+---
+
+## Backend
+
+- **NestJS** — la capa de API de UFT y Voopy: separación de dominios por módulos, endpoints REST, guards para RBAC.
+- **Laravel** — reconstruí la plataforma educativa de Sigaweb sobre Laravel con multi-tenancy, y migré un despliegue Laravel más antiguo de CentOS a Docker.
+- **Java / Spring** — API REST para una plataforma de reservas de hospedaje (Digital Booking), construida como parte de un equipo Scrum.
+
+## Frontend
+
+- **React** — dashboards administrativos y públicos de UFT, además de los dashboards por rol de Sigaweb (estudiante, docente, admin, super-admin).
+- **Next.js** — el módulo de e-commerce de Fleed Shop y el frontend web de Voopy, ambos con App Router.
+- **TypeScript** — el default en todos los proyectos anteriores; modo estricto donde el codebase lo permite.
+- **React Native** — la app de espectadores de UFT, en desarrollo en paralelo a la plataforma web.
+
+## Bases de Datos
+
+- **PostgreSQL** — almacenamiento principal de UFT (49 entidades en producción) y Voopy, vía TypeORM.
+- **MySQL** — Digital Booking y el stack de Sigaweb antes de la migración.
+
+## Cloud
+
+- **DigitalOcean** — VPS de producción de UFT.
+- **AWS** — destino de despliegue de Digital Booking durante el proyecto de bootcamp.
+
+## Arquitectura
+
+- **Diseño orientado a eventos** — NATS JetStream desacopla el registro de puntajes de UFT del recálculo de estadísticas/posiciones.
+- **RBAC** — control de acceso basado en roles que determina qué pueden hacer anotadores, organizadores y admins en UFT.
+- **Multi-tenancy** — Sigaweb sirve a múltiples instituciones desde un solo despliegue.
+
+## DevOps
+
+- **Docker** — todos los proyectos actuales (UFT, Sigaweb, Voopy) se despliegan como contenedores; el proyecto de migración de Sigaweb fue específicamente sobre mover un despliegue legacy en CentOS hacia Docker.
+- **Nginx** — reverse proxy y terminación TLS frente a UFT y el stack migrado de Sigaweb.
+- **CI/CD** — parte de la migración de infraestructura de Sigaweb.
+
+## Testing
+
+- **Jest, Selenium, Postman** — testing unitario, end-to-end y de API en Digital Booking, construido con un equipo Scrum a lo largo de cuatro sprints.
+
+## Observabilidad
+
+- **Google Analytics** — la única instrumentación que tiene UFT hoy; así se mide la cifra de ~1,700 usuarios. Logging estructurado y APM todavía no están implementados — ese vacío se reconoce honestamente en [Ingeniería](/engineering), no se oculta.
+
+## Tiempo real
+
+- **NATS JetStream** — la columna vertebral de eventos detrás del scorekeeping y las estadísticas en vivo de UFT, cubierto en detalle en [Case Studies](/case-studies).

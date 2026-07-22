@@ -1,0 +1,31 @@
+---
+title: "Arquitectura orientada a eventos con NATS"
+description: "Por qué el backend de UFT publica eventos en vez de calcular todo de forma síncrona."
+date: 2025-03-19
+tags: ["NATS JetStream", "Arquitectura orientada a eventos", "Backend"]
+order: 4
+---
+
+<Callout type="problem">
+Varias partes de UFT necesitan reaccionar al mismo hecho — se registró un puntaje — sin que toda esa reacción ocurra dentro del request que lo registró: estadísticas, posiciones y vistas de espectadores dependen de eso, pero la API no debería bloquearse esperando que las tres terminen.
+</Callout>
+
+<Callout type="alternatives">
+Pendiente — qué consideré además de NATS JetStream (otro broker, callbacks HTTP simples, polling por cron), y por qué no encajaban.
+</Callout>
+
+<Callout type="decision">
+Pendiente — específicamente por qué JetStream sobre NATS simple, qué subjects/streams existen, y qué garantías de entrega usa realmente UFT.
+</Callout>
+
+<Callout type="tradeoffs">
+Pendiente.
+</Callout>
+
+<Callout type="result">
+Pendiente.
+</Callout>
+
+<Callout type="lessons">
+Pendiente.
+</Callout>

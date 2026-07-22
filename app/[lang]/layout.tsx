@@ -1,9 +1,11 @@
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "../globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { Header } from "@/components/sections/header";
+import { Footer } from "@/components/sections/footer";
 import { siteConfig } from "@/config/site";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { locales, type Locale } from "@/i18n/config";
 
@@ -12,38 +14,45 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+});
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
+  const t = await getTranslations({ locale: lang, namespace: "metadata" });
 
   const ogLocale = lang === "es" ? "es_ES" : "en_US";
   const alternateLocale = lang === "es" ? "en_US" : "es_ES";
+  const description = t("description");
 
   return {
     metadataBase: new URL(siteConfig.url),
     title: {
-      default: siteConfig.name,
+      default: `${siteConfig.name} — ${t("titleSuffix")}`,
       template: `%s | ${siteConfig.name}`,
     },
-    description: siteConfig.description,
+    description,
     keywords: [
-      "Next.js",
-      "React",
+      "Backend Engineer",
+      "NestJS",
+      "PostgreSQL",
+      "Event-Driven Architecture",
+      "NATS JetStream",
+      "System Design",
       "TypeScript",
-      "Tailwind CSS",
-      "Full-Stack Developer",
-      "DevOps",
-      "Portfolio",
     ],
     alternates: {
       canonical: `/${lang}`,
       languages: {
-        es: "/es",
         en: "/en",
-        "x-default": "/es",
+        es: "/es",
+        "x-default": "/en",
       },
     },
     authors: [
@@ -59,7 +68,7 @@ export async function generateMetadata({
       alternateLocale: [alternateLocale],
       url: `/${lang}`,
       title: siteConfig.name,
-      description: siteConfig.description,
+      description,
       siteName: siteConfig.name,
       images: [
         {
@@ -73,7 +82,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: siteConfig.name,
-      description: siteConfig.description,
+      description,
       images: [siteConfig.ogImage],
     },
   };
@@ -109,7 +118,9 @@ export default async function LocaleLayout({
 
   return (
     <html lang={lang} suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body
+        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+      >
         <NextIntlClientProvider messages={messages} locale={lang}>
           <ThemeProvider
             attribute="class"
@@ -117,7 +128,11 @@ export default async function LocaleLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

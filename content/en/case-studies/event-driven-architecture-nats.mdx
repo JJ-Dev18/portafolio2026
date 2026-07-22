@@ -1,0 +1,31 @@
+---
+title: "Event-driven architecture using NATS"
+description: "Why UFT's backend publishes events instead of computing everything inline."
+date: 2025-03-19
+tags: ["NATS JetStream", "Event-Driven Architecture", "Backend"]
+order: 4
+---
+
+<Callout type="problem">
+Several parts of UFT need to react to the same underlying fact — a score was recorded — without all of that reaction happening inside the request that recorded it: statistics, standings, and spectator-facing views all depend on it, but the API shouldn't block on all three finishing.
+</Callout>
+
+<Callout type="alternatives">
+Pending — what I considered besides NATS JetStream (a different broker, plain HTTP callbacks, cron-based polling), and why those didn't fit.
+</Callout>
+
+<Callout type="decision">
+Pending — specifically why JetStream over plain NATS, what subjects/streams exist, and what delivery guarantees UFT actually relies on.
+</Callout>
+
+<Callout type="tradeoffs">
+Pending.
+</Callout>
+
+<Callout type="result">
+Pending.
+</Callout>
+
+<Callout type="lessons">
+Pending.
+</Callout>

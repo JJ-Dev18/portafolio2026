@@ -1,0 +1,31 @@
+---
+title: "Optimizing tournament standings"
+description: "Recomputing standings for a live tournament without it becoming the bottleneck."
+date: 2025-03-19
+tags: ["Performance", "PostgreSQL", "Data Modeling"]
+order: 2
+---
+
+<Callout type="problem">
+Standings depend on every completed match in a tournament, and they need to update as soon as a match finishes — not on a delay, and not in a way that competes with the request path that's recording live scores for other, still-in-progress matches.
+</Callout>
+
+<Callout type="alternatives">
+Pending — this section will cover what a naive recomputation looked like, what made it insufficient, and what else I considered.
+</Callout>
+
+<Callout type="decision">
+Pending.
+</Callout>
+
+<Callout type="tradeoffs">
+Pending.
+</Callout>
+
+<Callout type="result">
+Pending — including how correctness was verified, not just how it performs.
+</Callout>
+
+<Callout type="lessons">
+Pending.
+</Callout>

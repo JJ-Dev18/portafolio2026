@@ -1,0 +1,31 @@
+---
+title: "Designing realtime scorekeeping"
+description: "Keeping every scorekeeper, spectator, and stats view consistent while a match is live."
+date: 2025-03-19
+tags: ["Realtime", "Concurrency", "NestJS", "NATS JetStream"]
+order: 1
+---
+
+<Callout type="problem">
+UFT needs scores recorded during a live match to be immediately visible and consistent across every client watching that match — organizers' dashboards, spectator views, and live statistics. Multiple games run concurrently during a tournament, and a match can have more than one person able to record a score.
+</Callout>
+
+<Callout type="alternatives">
+Pending — this section will cover the specific approaches I evaluated (e.g. polling vs. push, single-writer vs. optimistic concurrency) once documented in detail.
+</Callout>
+
+<Callout type="decision">
+Pending — the actual mechanism UFT uses today, written up precisely rather than summarized from memory.
+</Callout>
+
+<Callout type="tradeoffs">
+Pending.
+</Callout>
+
+<Callout type="result">
+Pending — what this looks like in production today, with real numbers where they exist.
+</Callout>
+
+<Callout type="lessons">
+Pending.
+</Callout>

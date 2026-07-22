@@ -1,40 +1,44 @@
 {
   "navigation": {
-    "home": "Home",
-    "projects": "Projects",
-    "blog": "Blog",
+    "about": "About",
+    "uft": "UFT",
+    "engineering": "Engineering",
+    "caseStudies": "Case Studies",
+    "experience": "Experience",
+    "skills": "Skills",
+    "learning": "Learning",
     "contact": "Contact"
   },
-  "hero": {
+  "metadata": {
+    "titleSuffix": "Backend Engineer",
+    "description": "Backend engineer building and operating production systems. Currently building Ultimate Frisbee Tracker, a real-time tournament platform serving ~1,700 users."
+  },
+  "home": {
     "greeting": "Hi, I'm",
     "name": "Juan Murillo",
-    "role": "Full-Stack Developer & DevOps",
-    "description": "Passionate about creating innovative and scalable web solutions. Specialized in Next.js, React, TypeScript and cloud architecture.",
-    "cta_projects": "View my projects",
-    "cta_contact": "Contact me"
+    "role": "Backend Engineer",
+    "description": "I design and operate production backend systems. Right now I'm building Ultimate Frisbee Tracker, a real-time tournament platform running in production since March 2025.",
+    "ctaUft": "See the UFT case study",
+    "ctaEngineering": "View the architecture",
+    "focusTitle": "What I focus on",
+    "focusDescription": "Backend systems that hold up in production: data modeling, event-driven architecture, realtime consistency, and the infrastructure decisions behind them.",
+    "stats": [
+      { "value": "May 2024 → Mar 2025", "label": "Build to production launch" },
+      { "value": "~1,700", "label": "Users tracked via Google Analytics" },
+      { "value": "49", "label": "Database entities in production" },
+      { "value": "NATS JetStream", "label": "Event-driven backend" }
+    ]
   },
-  "techStack": {
-    "title": "Tech Stack",
-    "description": "Technologies and tools I work with daily to create robust and scalable solutions.",
-    "categories": {
-      "frontend": "Frontend",
-      "backend": "Backend",
-      "databases": "Databases",
-      "infrastructure": "Infrastructure & DevOps"
-    },
-    "badges": {
-      "enterprise": "Enterprise Deployment Experience"
-    }
-  },
-  "certificates": {
-    "title": "Certificates",
-    "description": "Credentials and certifications that support my professional experience.",
-    "viewCredential": "View credential",
-    "emptyState": "No certificates published yet."
+  "footer": {
+    "bio": "Backend engineer building and operating production systems.",
+    "navigate": "Navigate",
+    "otherWork": "Other work",
+    "otherWorkNote": "Earlier full-stack and infrastructure projects, kept for reference.",
+    "otherWorkLink": "View other projects"
   },
   "projects": {
-    "title": "My Projects",
-    "description": "A collection of projects I've worked on, from web applications to infrastructure and DevOps solutions.",
+    "title": "Other Projects",
+    "description": "Earlier full-stack and infrastructure work. My current focus is backend engineering — see the UFT case study for that.",
     "viewProject": "View project",
     "visitSite": "Visit site",
     "frontendRepo": "Frontend repo",
@@ -43,43 +47,31 @@
     "backToProjects": "Back to projects",
     "emptyState": "No projects available at the moment."
   },
-  "blog": {
-    "title": "Blog",
-    "description": "I share my experiences, learnings and reflections on web development, DevOps and technology.",
-    "readMore": "Read more",
-    "backToBlog": "Back to blog",
-    "emptyState": "No posts available at the moment."
+  "caseStudies": {
+    "title": "Case Studies",
+    "description": "Engineering decisions from building UFT, explained the way I'd explain them in a design review: the problem, what I considered, what I chose, and why.",
+    "backToCaseStudies": "Back to case studies",
+    "readCaseStudy": "Read case study",
+    "emptyState": "No case studies published yet."
+  },
+  "learning": {
+    "comingSoon": "Engineering Academy — coming soon"
   },
   "contact": {
     "title": "Contact",
-    "description": "Have a project in mind or just want to chat? I'd love to hear from you!",
-    "form": {
-      "name": "Name",
-      "namePlaceholder": "Your name",
-      "email": "Email",
-      "emailPlaceholder": "your@email.com",
-      "message": "Message",
-      "messagePlaceholder": "Tell me about your project...",
-      "send": "Send message",
-      "sending": "Sending..."
-    },
+    "description": "I'm open to Senior Backend Engineering conversations.",
     "info": {
       "title": "Contact Information",
       "email": "Email",
       "location": "Location",
       "locationValue": "Colombia",
       "availability": "Availability",
-      "availabilityValue": "Available for freelance projects"
+      "availabilityValue": "Open to backend engineering opportunities"
     },
     "social": {
-      "title": "Follow me",
+      "title": "Find me online",
       "github": "GitHub",
       "linkedin": "LinkedIn"
     }
-  },
-  "common": {
-    "loading": "Loading...",
-    "error": "Error",
-    "notFound": "Not found"
   }
 }

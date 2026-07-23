@@ -16,18 +16,26 @@
   "home": {
     "greeting": "Hola, soy",
     "name": "Juan Murillo",
-    "role": "Backend Engineer",
-    "description": "Diseño y opero sistemas backend en producción. Ahora mismo estoy construyendo Ultimate Frisbee Tracker, una plataforma de torneos en tiempo real en producción desde marzo de 2025.",
+    "tagline": "Construyo software de producción.",
+    "subtitle": "Creador de Ultimate Frisbee Tracker — un SaaS real que da soporte a torneos en vivo.",
+    "focus": "Actualmente especializado en Backend Engineering, sistemas distribuidos y arquitectura de software.",
     "ctaUft": "Ver el case study de UFT",
     "ctaEngineering": "Ver la arquitectura",
-    "focusTitle": "En qué me enfoco",
-    "focusDescription": "Sistemas backend que se sostienen en producción: modelado de datos, arquitectura orientada a eventos, consistencia en tiempo real, y las decisiones de infraestructura detrás de todo eso.",
     "stats": [
-      { "value": "May 2024 → Mar 2025", "label": "De inicio a lanzamiento en producción" },
-      { "value": "~1,700", "label": "Usuarios registrados vía Google Analytics" },
-      { "value": "49", "label": "Entidades de base de datos en producción" },
-      { "value": "NATS JetStream", "label": "Backend orientado a eventos" }
+      { "value": "1,700+", "label": "Usuarios de la plataforma" },
+      { "value": "49", "label": "Entidades de base de datos" },
+      { "value": "100+", "label": "Espectadores concurrentes probados" }
     ]
+  },
+  "whyMatters": {
+    "title": "Por qué importa UFT",
+    "body": "UFT comenzó como una herramienta para resolver problemas reales en los torneos de Ultimate Frisbee. Con el tiempo se convirtió en mi laboratorio de ingeniería. Cada decisión de arquitectura, optimización y escalabilidad que encontrarás en este portafolio nació de un problema que tuve que resolver en producción."
+  },
+  "architecturePanel": {
+    "title": "Arquitectura Backend",
+    "modules": "32 Módulos de Dominio",
+    "items": ["NestJS", "PostgreSQL", "Orientado a Eventos", "RBAC", "WebSockets", "Docker", "NATS"],
+    "cta": "Leer el case study de ingeniería →"
   },
   "footer": {
     "bio": "Ingeniero backend construyendo y operando sistemas en producción.",

@@ -16,15 +16,14 @@ export function Hero() {
 
   return (
     <section className="w-full">
-      <div className="max-w-4xl mx-auto px-4 py-16 md:py-24 flex flex-col gap-8">
+      <div className="max-w-4xl mx-auto px-4 pt-16 pb-12 md:pt-24 flex flex-col gap-6">
+        <p className="font-mono text-sm text-muted-foreground">{t("greeting")} {t("name")}</p>
         <div className="flex flex-col gap-4">
-          <p className="font-mono text-sm text-muted-foreground">{t("greeting")} {t("name")}</p>
-          <h1 className="text-4xl font-bold tracking-tight md:text-5xl">
-            {t("role")}
+          <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
+            {t("tagline")}
           </h1>
-          <p className="max-w-[60ch] text-lg text-muted-foreground">
-            {t("description")}
-          </p>
+          <p className="max-w-[60ch] text-xl">{t("subtitle")}</p>
+          <p className="max-w-[60ch] text-lg text-muted-foreground">{t("focus")}</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
@@ -56,13 +55,6 @@ export function Hero() {
       </div>
 
       <StatBar stats={stats} className="max-w-4xl mx-auto px-4" />
-
-      <div className="max-w-4xl mx-auto px-4 py-16 md:py-24">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          {t("focusTitle")}
-        </h2>
-        <p className="mt-3 max-w-[60ch] text-lg">{t("focusDescription")}</p>
-      </div>
     </section>
   );
 }

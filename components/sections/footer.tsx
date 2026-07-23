@@ -16,9 +16,9 @@ export function Footer() {
   const navigation = [
     { title: t("about"), href: `/${lang}/about` },
     { title: t("uft"), href: `/${lang}/uft` },
-    { title: t("engineering"), href: `/${lang}/engineering` },
-    { title: t("caseStudies"), href: `/${lang}/case-studies` },
     { title: t("experience"), href: `/${lang}/experience` },
+    { title: t("caseStudies"), href: `/${lang}/case-studies` },
+    { title: t("engineering"), href: `/${lang}/engineering` },
     { title: t("skills"), href: `/${lang}/skills` },
     { title: t("learning"), href: `/${lang}/learning` },
     { title: t("contact"), href: `/${lang}/contact` },

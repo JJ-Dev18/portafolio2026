@@ -1,15 +1,8 @@
 import type { ReactNode } from "react";
-import { AlertTriangle, GitBranch, Scale, CheckCircle2, Lightbulb, ListChecks } from "lucide-react";
+import { AlertTriangle, GitBranch, Scale, Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type CalloutType =
-  | "problem"
-  | "alternatives"
-  | "decision"
-  | "tradeoffs"
-  | "result"
-  | "lessons"
-  | "note";
+type CalloutType = "problem" | "solution" | "tradeoffs" | "lessons" | "note";
 
 const CONFIG: Record<CalloutType, { label: string; icon: typeof AlertTriangle; className: string }> = {
   problem: {
@@ -17,13 +10,8 @@ const CONFIG: Record<CalloutType, { label: string; icon: typeof AlertTriangle; c
     icon: AlertTriangle,
     className: "border-l-destructive/60",
   },
-  alternatives: {
-    label: "Alternatives considered",
-    icon: ListChecks,
-    className: "border-l-muted-foreground/40",
-  },
-  decision: {
-    label: "Decision",
+  solution: {
+    label: "Solution",
     icon: GitBranch,
     className: "border-l-primary",
   },
@@ -31,11 +19,6 @@ const CONFIG: Record<CalloutType, { label: string; icon: typeof AlertTriangle; c
     label: "Trade-offs",
     icon: Scale,
     className: "border-l-amber-500/70",
-  },
-  result: {
-    label: "Result",
-    icon: CheckCircle2,
-    className: "border-l-emerald-600/70",
   },
   lessons: {
     label: "Lessons learned",

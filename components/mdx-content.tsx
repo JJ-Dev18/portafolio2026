@@ -7,6 +7,7 @@ import { MermaidDiagram } from "@/components/mdx/mermaid-diagram";
 import { Callout } from "@/components/mdx/callout";
 import { StatBar } from "@/components/ui/stat-tile";
 import { Timeline } from "@/components/ui/timeline";
+import { Checklist } from "@/components/ui/checklist";
 
 interface MDXContentProps {
   code: string;
@@ -45,6 +46,7 @@ const mdxComponents = {
   Callout,
   StatBar,
   Timeline,
+  Checklist,
 };
 
 /* eslint-disable react-hooks/static-components */

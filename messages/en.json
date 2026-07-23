@@ -16,18 +16,26 @@
   "home": {
     "greeting": "Hi, I'm",
     "name": "Juan Murillo",
-    "role": "Backend Engineer",
-    "description": "I design and operate production backend systems. Right now I'm building Ultimate Frisbee Tracker, a real-time tournament platform running in production since March 2025.",
+    "tagline": "I build production software.",
+    "subtitle": "Creator of Ultimate Frisbee Tracker — a real SaaS platform powering live tournaments.",
+    "focus": "Currently specializing in Backend Engineering, distributed systems, and software architecture.",
     "ctaUft": "See the UFT case study",
     "ctaEngineering": "View the architecture",
-    "focusTitle": "What I focus on",
-    "focusDescription": "Backend systems that hold up in production: data modeling, event-driven architecture, realtime consistency, and the infrastructure decisions behind them.",
     "stats": [
-      { "value": "May 2024 → Mar 2025", "label": "Build to production launch" },
-      { "value": "~1,700", "label": "Users tracked via Google Analytics" },
-      { "value": "49", "label": "Database entities in production" },
-      { "value": "NATS JetStream", "label": "Event-driven backend" }
+      { "value": "1,700+", "label": "Platform users" },
+      { "value": "49", "label": "Database entities" },
+      { "value": "100+", "label": "Concurrent spectators tested" }
     ]
+  },
+  "whyMatters": {
+    "title": "Why UFT Matters",
+    "body": "UFT started as a tool to solve real problems at Ultimate Frisbee tournaments. Over time, it became my engineering lab. Every architecture decision, optimization, and scalability trade-off you'll find in this portfolio started as a problem I had to solve in production."
+  },
+  "architecturePanel": {
+    "title": "Backend Architecture",
+    "modules": "32 Feature Modules",
+    "items": ["NestJS", "PostgreSQL", "Event Driven", "RBAC", "WebSockets", "Docker", "NATS"],
+    "cta": "Read engineering case study →"
   },
   "footer": {
     "bio": "Backend engineer building and operating production systems.",

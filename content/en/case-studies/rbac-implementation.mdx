@@ -10,6 +10,18 @@ order: 3
 UFT has 13 role-scoped portals across a domain hierarchy (Federation → League → Club → Team → Player) — federation presidents, league presidents, club admins, coaches, team leaders, tournament organizers, scorekeepers, and players all need different, narrower capabilities on the same underlying data. Early on, roles got seeded inconsistently across two separate seeders plus ad-hoc strings used directly in `@Roles(...)` decorators, so the same conceptual role ended up with multiple literal name variants in the database.
 </Callout>
 
+```mermaid
+flowchart TD
+  Req[Incoming request] --> Decl{"@Roles or @RequirePermissions declared?"}
+  Decl -->|Neither| Allow[Allow — any authenticated user]
+  Decl -->|Either| Super{Role is Super Administrador?}
+  Super -->|Yes| Allow
+  Super -->|No| AliasLookup[Resolve seeded role via alias table]
+  AliasLookup --> Satisfies{Satisfies required role or permission?}
+  Satisfies -->|Yes| Allow
+  Satisfies -->|No| Deny[Deny]
+```
+
 <Callout type="solution">
 Instead of a risky one-time migration to rename every role consistently across live data, I built a role-alias table that maps known variants (`"Organizador"`, `"Tournament Organizer"` → `"Organizador de Torneo"`, etc.) to a canonical name, so a `@Roles(...)` check passes regardless of which variant a given user was actually seeded with — grouping only variants of the *same* privilege level, never merging across levels. Access control itself runs through a single guard checking both role-based (`@Roles`) and permission-based (`@RequirePermissions`) metadata: if a route declares neither, it's open to any authenticated user; if it declares either, the request must satisfy it. "Super Administrador" is a hardcoded bypass, deliberately — safe specifically because that role can't be self-assigned (a privilege-escalation path that let a user grant themselves admin was found and closed). The safe default is explicit: a required check that's simply absent never grants access on its own.
 </Callout>

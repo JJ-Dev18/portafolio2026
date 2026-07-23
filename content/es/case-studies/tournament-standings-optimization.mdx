@@ -10,6 +10,14 @@ order: 2
 No todos los torneos usan el mismo formato. Round robin (2–8 equipos), eliminación simple (8/16/32 equipos), y grupos hacia eliminación (9–15 o 17+ equipos, con tamaños de grupo y cantidades de avance configurables) necesitan matemática distinta de generación de bracket y posiciones — y los organizadores además pedían formatos personalizados: brackets divididos por rango de ranking, y "fases de ranking" separadas para determinar posiciones exactas de equipos que no llegan al bracket principal.
 </Callout>
 
+```mermaid
+flowchart LR
+  Groups[Fase de grupos] -->|teamsAdvancing, parentPhaseName| Knockout[Fase de eliminación]
+  Groups -->|fullRanking: equipos que no avanzan| RankPhase[Fase de ranking auto-generada]
+  Knockout -->|fullRanking: perdedores| Consolation[Partidos de consolación, misma fase]
+  Independent[Fase de ranking independiente, rankRange] -->|generateRankingMatches| Positions[Posiciones exactas, ej. 9-12]
+```
+
 <Callout type="solution">
 En vez de codificar un conjunto fijo de formatos y agregar código nuevo por cada forma de torneo nueva, las fases se volvieron datos: cada fase tiene un `order`, un `teamsAdvancing` opcional, un `parentPhaseName` (debe coincidir exactamente con el nombre de una fase anterior, lo que define el pipeline), un `rankRange` opcional para brackets divididos/independientes, y un flag `fullRanking` con dos comportamientos distintos según si está asociado a una fase de grupos o de eliminación. Antes de refactorizar el código de frontend alrededor, escribí tests de caracterización contra la lógica real de propagación cubriendo casos de caja negra: un bracket de 4 equipos, uno de 8, uno con bye, y uno con walkover — los tests describen lo que el sistema ya hace, así que un refactor que cambie los números se detecta de inmediato.
 </Callout>

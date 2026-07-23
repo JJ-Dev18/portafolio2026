@@ -10,6 +10,18 @@ order: 3
 UFT tiene 13 portales por rol a lo largo de una jerarquía de dominio (Federación → Liga → Club → Equipo → Jugador) — presidentes de federación, presidentes de liga, admins de club, coaches, líderes de equipo, organizadores de torneo, anotadores y jugadores necesitan capacidades distintas y más limitadas sobre los mismos datos subyacentes. Al principio, los roles se sembraron de forma inconsistente entre dos seeders separados más strings ad-hoc usados directamente en decoradores `@Roles(...)`, así que el mismo rol conceptual terminó con múltiples variantes de nombre literal en la base de datos.
 </Callout>
 
+```mermaid
+flowchart TD
+  Req[Request entrante] --> Decl{"¿Declara @Roles o @RequirePermissions?"}
+  Decl -->|Ninguno| Allow[Permitir — cualquier usuario autenticado]
+  Decl -->|Alguno| Super{¿El rol es Super Administrador?}
+  Super -->|Sí| Allow
+  Super -->|No| AliasLookup[Resolver rol sembrado vía tabla de alias]
+  AliasLookup --> Satisfies{¿Satisface el rol o permiso requerido?}
+  Satisfies -->|Sí| Allow
+  Satisfies -->|No| Deny[Denegar]
+```
+
 <Callout type="solution">
 En vez de una migración riesgosa para renombrar cada rol de forma consistente en datos en vivo, construí una tabla de alias de rol que mapea variantes conocidas (`"Organizador"`, `"Tournament Organizer"` → `"Organizador de Torneo"`, etc.) a un nombre canónico, así una verificación `@Roles(...)` pasa sin importar con qué variante se haya sembrado a un usuario — agrupando solo variantes del MISMO nivel de privilegio, nunca fusionando entre niveles. El control de acceso en sí pasa por un único guard que verifica metadata basada en roles (`@Roles`) y en permisos (`@RequirePermissions`): si una ruta no declara ninguno, queda abierta a cualquier usuario autenticado; si declara alguno, el request debe satisfacerlo. "Super Administrador" es un bypass codificado, deliberadamente — seguro específicamente porque ese rol no se puede autoasignar (se encontró y cerró una ruta de escalada de privilegios que permitía a un usuario otorgarse admin a sí mismo). El default seguro es explícito: una verificación requerida que simplemente está ausente nunca concede acceso por sí sola.
 </Callout>

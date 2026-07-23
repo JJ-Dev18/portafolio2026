@@ -10,6 +10,20 @@ order: 4
 The social feed (posts, follows, player activity) is a separate service (`social-bff`) from the core tournament backend, and it shouldn't be able to slow down or break match scoring, registrations, or tournament automation — but it still needs to know when a match finishes or a player registers, reliably, not just "usually."
 </Callout>
 
+```mermaid
+sequenceDiagram
+  participant API as backend-nest
+  participant NATS as NATS JetStream (UFT_EVENTS)
+  participant BFF as social-bff (durable consumer)
+
+  API->>API: match finishes
+  API->>NATS: publish uft.match.finished (fire-and-forget)
+  Note over API: NATS unreachable? logged and swallowed, never blocks the response
+  NATS-->>BFF: deliver (at-least-once)
+  BFF->>BFF: create feed post
+  BFF-->>NATS: ack
+```
+
 <Callout type="solution">
 A direct HTTP call from the backend to `social-bff` on every relevant action would couple the two services' uptime together, so I used NATS JetStream instead — chosen specifically over plain NATS because `social-bff` needs at-least-once delivery with replay, which plain pub/sub doesn't give you. One JetStream stream (`UFT_EVENTS`), subject convention `uft.<domain>.<event>`, 7-day retention. `backend-nest` publishes fire-and-forget: every publish call is wrapped so that if NATS is unreachable, it's logged and swallowed — a NATS outage must never break the request that triggered it. `social-bff` consumes through a durable, named JetStream consumer with explicit ack/nak, so it picks up exactly where it left off after a restart.
 </Callout>

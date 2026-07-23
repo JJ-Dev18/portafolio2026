@@ -22,9 +22,9 @@
     "ctaUft": "See the UFT case study",
     "ctaEngineering": "View the architecture",
     "stats": [
-      { "value": "1,700+", "label": "Platform users" },
-      { "value": "49", "label": "Database entities" },
-      { "value": "100+", "label": "Concurrent spectators tested" }
+      { "value": "1,700+", "label": "Tournament platform users" },
+      { "value": "100+", "label": "Concurrent spectators tested" },
+      { "value": "49", "label": "Database entities" }
     ]
   },
   "whyMatters": {

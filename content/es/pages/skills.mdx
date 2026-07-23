@@ -1,29 +1,29 @@
 ---
 title: "Habilidades"
-description: "Capacidades agrupadas por dominio, probadas en producción — no una pared de badges."
+description: "Lo que sé hacer, probado en producción — las tecnologías son una lista aparte, no el titular."
 ---
 
 ## Backend
 
-<Checklist items={["REST APIs", "Sistemas Distribuidos", "Arquitectura Orientada a Eventos", "Autenticación", "Autorización (RBAC)", "Sistemas en Tiempo Real", "PostgreSQL", "Optimización de Rendimiento"]} />
+<Checklist items={["REST APIs", "Autenticación", "Autorización", "Sistemas en Tiempo Real", "Sistemas Distribuidos", "Optimización de Rendimiento", "Caching", "Diseño de Base de Datos"]} />
 
 Construido y operado en la API de 32 módulos de UFT y su microservicio separado de feed social — ver [Ingeniería](/engineering).
 
 ## Frontend
 
-<Checklist items={["React", "Next.js (App Router)", "TypeScript", "React Native / Expo", "UX Offline-First", "UI Basada en Roles"]} />
+<Checklist items={["Arquitectura de Componentes", "Manejo de Estado", "UI Basada en Roles", "UX Offline-First", "Diseño Responsive"]} />
 
 Dashboards web para UFT y Sigaweb, más la app móvil de UFT lista para campo, para anotadores.
 
 ## Bases de Datos
 
-<Checklist items={["PostgreSQL", "Modelado de Datos", "TypeORM", "MySQL", "Redis (caché)"]} />
+<Checklist items={["Modelado de Datos", "Diseño de Esquemas", "Optimización de Queries", "Estrategia de Caching"]} />
 
 49 entidades en producción entre la API principal de UFT y su servicio de feed social.
 
 ## Cloud
 
-<Checklist items={["DigitalOcean", "AWS", "Administración de VPS", "DNS y TLS"]} />
+<Checklist items={["Administración de VPS", "DNS y TLS", "Automatización de Despliegue"]} />
 
 UFT corre producción y staging en paralelo en un solo droplet, migrado con ~3 minutos de downtime.
 
@@ -35,13 +35,13 @@ NATS JetStream desacopla el feed social de UFT de las escrituras principales; ve
 
 ## DevOps
 
-<Checklist items={["Docker", "CI/CD (GitHub Actions)", "Nginx", "Pipelines de Despliegue", "Migración de Infraestructura"]} />
+<Checklist items={["CI/CD", "Containerización", "Pipelines de Despliegue", "Migración de Infraestructura"]} />
 
 Diagnostiqué por mi cuenta un pipeline de despliegue de 20–45 minutos y entregué un plan de arreglo priorizado — no solo "despliega".
 
 ## Testing
 
-<Checklist items={["Testing Unitario (Jest)", "Testing de Integración", "Testing de Caracterización", "Testing de API (Postman)", "E2E (Selenium)"]} />
+<Checklist items={["Testing Unitario", "Testing de Integración", "Testing de Caracterización", "Testing de API", "Testing E2E"]} />
 
 83 tests de websockets con más de 90% de cobertura en rutas críticas de tiempo real de UFT, más tests de concurrencia dedicados.
 
@@ -53,6 +53,12 @@ Vacío honesto: logging estructurado y APM todavía no están implementados — 
 
 ## Tiempo real
 
-<Checklist items={["WebSockets (Socket.io)", "Event Streaming (NATS JetStream)", "Manejo de Concurrencia", "Video en Vivo (RTMP/HLS)"]} />
+<Checklist items={["Comunicación WebSocket", "Event Streaming", "Manejo de Concurrencia", "Entrega de Video en Vivo"]} />
 
 Reglas propias de Ultimate — detección de break, validación de Callahan — impuestas en vivo a medida que llegan los eventos.
+
+## Tecnologías
+
+Las herramientas detrás de las capacidades de arriba:
+
+<Checklist items={["NestJS", "Node.js", "TypeScript", "React", "Next.js", "React Native / Expo", "PostgreSQL", "MySQL", "Redis", "TypeORM", "Docker", "Nginx", "DigitalOcean", "AWS", "NATS JetStream", "Socket.io", "GitHub Actions", "Jest"]} className="sm:grid-cols-3" />

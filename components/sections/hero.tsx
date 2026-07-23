@@ -23,7 +23,6 @@ export function Hero() {
             {t("tagline")}
           </h1>
           <p className="max-w-[60ch] text-xl">{t("subtitle")}</p>
-          <p className="max-w-[60ch] text-lg text-muted-foreground">{t("focus")}</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">

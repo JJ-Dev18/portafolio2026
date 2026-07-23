@@ -10,6 +10,14 @@ order: 2
 Tournaments don't all use the same format. Round robin (2–8 teams), single elimination (8/16/32 teams), and groups-into-elimination (9–15 or 17+ teams, with configurable group sizes and advancing counts) all need different bracket generation and standings math — and organizers also wanted custom formats: split brackets by rank range, and separate "ranking phases" to determine exact placements for teams that don't make the main bracket.
 </Callout>
 
+```mermaid
+flowchart LR
+  Groups[Groups phase] -->|teamsAdvancing, parentPhaseName| Knockout[Elimination phase]
+  Groups -->|fullRanking: non-advancing teams| RankPhase[Auto-generated ranking phase]
+  Knockout -->|fullRanking: losers| Consolation[Consolation matches, same phase]
+  Independent[Independent ranking phase, rankRange] -->|generateRankingMatches| Positions[Exact positions, e.g. 9-12]
+```
+
 <Callout type="solution">
 Rather than hardcoding a fixed set of formats and adding new code for every new tournament shape, phases became data: each phase has an `order`, an optional `teamsAdvancing`, a `parentPhaseName` (must match an earlier phase's name exactly, which defines the pipeline), an optional `rankRange` (e.g. `"9-15"`) for split/independent brackets, and a `fullRanking` flag with two distinct behaviors depending on whether it's attached to a groups phase or an elimination phase. Before refactoring any of the surrounding frontend code, I wrote characterization tests against the actual propagation logic covering black-box cases: a 4-team bracket, an 8-team bracket, a bracket with a bye, and a bracket with a walkover — the tests describe what the system already does, so a refactor that changes the numbers gets caught immediately.
 </Callout>

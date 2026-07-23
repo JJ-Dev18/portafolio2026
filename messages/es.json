@@ -22,9 +22,9 @@
     "ctaUft": "Ver el case study de UFT",
     "ctaEngineering": "Ver la arquitectura",
     "stats": [
-      { "value": "1,700+", "label": "Usuarios de la plataforma" },
-      { "value": "49", "label": "Entidades de base de datos" },
-      { "value": "100+", "label": "Espectadores concurrentes probados" }
+      { "value": "1,700+", "label": "Usuarios de la plataforma en torneos" },
+      { "value": "100+", "label": "Espectadores concurrentes probados" },
+      { "value": "49", "label": "Entidades de base de datos" }
     ]
   },
   "whyMatters": {

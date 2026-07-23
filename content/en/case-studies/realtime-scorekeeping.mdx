@@ -10,6 +10,24 @@ order: 1
 Live matches need every connected client — the scorekeeper, spectators, live statistics — converging on the same state immediately, and the state itself isn't generic: a goal can only be scored by the attacking team unless it's a Callahan (a defense-only score), a "break" depends on whether the team that scored is the same team that pulled, and mixed-gender divisions have gender-ratio rules that change based on the parity of the goal count. This has to hold under bursts of events during fast play, not just one update at a time.
 </Callout>
 
+```mermaid
+sequenceDiagram
+  participant S as Scorekeeper
+  participant GW as EventsGateway (/events)
+  participant Room as Match Room
+  participant Spec as Spectators
+
+  S->>GW: connect (JWT in handshake)
+  Spec->>GW: connect (no token)
+  S->>GW: joinRoom(matchId)
+  Spec->>GW: joinRoom(matchId)
+  S->>GW: registerEvent(goal)
+  GW->>GW: validate (Callahan? break? mixtura ratio?)
+  GW->>Room: broadcast updateScore / breakScored
+  Room-->>Spec: updateScore
+  Note over GW: stat recalculation debounced 3s
+```
+
 <Callout type="solution">
 Socket.io over two namespaces (`/events` for live matches, `/notifications` for everything else), with the Ultimate-specific rules enforced directly in the gateway layer as events arrive: possession tracking, break detection (comparing who scored to who pulled), Callahan validation, and mixed-division gender-ratio warnings on odd goal counts. Statistics aren't recalculated on every single event — recalculation is debounced by 3 seconds so a burst of scoring plays doesn't trigger a recompute per event. Editing or deleting an event is restricted to the last one registered, and doing so explicitly reverts possession/score/mixtura state rather than replaying the whole match history. Authentication is optional to connect (spectators can watch without a token) but required for any action that changes state.
 </Callout>

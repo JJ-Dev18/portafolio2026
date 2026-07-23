@@ -1,0 +1,26 @@
+---
+title: "GATO – Multi-Location Gym CRM with an AI Agent"
+description: "Multi-tenant SaaS prototype for gym lead management and appointment booking, with a RAG-backed AI agent for WhatsApp — NestJS, PostgreSQL, and Redis."
+date: 2026-02-23
+image: "/projects/gato.png"
+tags: ["NestJS", "PostgreSQL", "TypeORM", "Redis", "Next.js", "Multi-Tenancy", "RAG", "Docker", "DigitalOcean"]
+published: true
+frontendRepoUrl: "https://github.com/JJ-Dev18/crm"
+backendOnline: false
+---
+
+## Overview
+
+**GATO** is a multi-tenant SaaS prototype for a gym chain operating multiple locations ("sedes"): lead capture, appointment booking per location, and a knowledge-backed AI agent that can answer prospect questions and route messages (built on a `messages`/`webhooks`/`notifications` module set, consistent with a WhatsApp-style integration). Each gym location gets its own booking page (`/booking/{sede}`), with tenant isolation enforced at the data layer.
+
+## Architecture
+
+The API is built with **NestJS**, **TypeORM**, and **PostgreSQL**, with a `TenantSubscriber` handling multi-tenancy at the ORM level rather than per-query filtering. Around 15 backend modules cover the core CRM (gyms, leads, appointments, availability, users, auth) plus an `agent` module with its own system prompt and tool definitions, and a `knowledge` module implementing RAG (retrieval-augmented generation) over a knowledge base — so the agent's answers are grounded in real gym information, not just a generic LLM prompt. **Redis** backs caching, and the frontend is **Next.js (App Router)** with **Tailwind CSS** and **shadcn/ui**.
+
+## Status
+
+This was built in a single intensive session as a working prototype, not a deployed product — it isn't live on a public domain, and the repository is set up for local Docker Compose or self-hosted droplet deployment rather than a hosted demo.
+
+## What this project demonstrates
+
+Applying the same patterns from UFT (NestJS + TypeORM, multi-tenancy, Dockerized deployment to a DigitalOcean droplet) to a different domain, plus a first pass at integrating an LLM agent with retrieval over real business data rather than treating "AI features" as a black box.

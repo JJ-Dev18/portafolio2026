@@ -1,0 +1,26 @@
+---
+title: "GATO – CRM Multi-Sede para Gimnasios con Agente de IA"
+description: "Prototipo SaaS multi-tenant para gestión de prospectos y citas de gimnasios con múltiples sedes, con un agente de IA basado en RAG para WhatsApp — NestJS, PostgreSQL y Redis."
+date: 2026-02-23
+image: "/projects/gato.png"
+tags: ["NestJS", "PostgreSQL", "TypeORM", "Redis", "Next.js", "Multi-Tenancy", "RAG", "Docker", "DigitalOcean"]
+published: true
+frontendRepoUrl: "https://github.com/JJ-Dev18/crm"
+backendOnline: false
+---
+
+## Overview
+
+**GATO** es un prototipo SaaS multi-tenant para una cadena de gimnasios con varias sedes: captura de prospectos, agendamiento de citas por sede, y un agente de IA respaldado por una base de conocimiento que puede responder preguntas de prospectos y enrutar mensajes (construido sobre módulos `messages`/`webhooks`/`notifications`, consistente con una integración tipo WhatsApp). Cada sede tiene su propia página de agendamiento (`/booking/{sede}`), con aislamiento de tenant impuesto a nivel de datos.
+
+## Arquitectura
+
+La API está construida con **NestJS**, **TypeORM** y **PostgreSQL**, con un `TenantSubscriber` manejando multi-tenancy a nivel de ORM en vez de filtrado por query. Cerca de 15 módulos backend cubren el CRM principal (gimnasios, prospectos, citas, disponibilidad, usuarios, auth) más un módulo `agent` con su propio system prompt y definición de herramientas, y un módulo `knowledge` que implementa RAG (retrieval-augmented generation) sobre una base de conocimiento — así las respuestas del agente están ancladas en información real del gimnasio, no solo en un prompt genérico de LLM. **Redis** respalda el caché, y el frontend es **Next.js (App Router)** con **Tailwind CSS** y **shadcn/ui**.
+
+## Estado
+
+Esto se construyó en una única sesión intensiva como prototipo funcional, no como un producto desplegado — no está en vivo en un dominio público, y el repositorio está preparado para Docker Compose local o despliegue en un droplet propio, no para una demo alojada.
+
+## Qué demuestra este proyecto
+
+Aplicar los mismos patrones de UFT (NestJS + TypeORM, multi-tenancy, despliegue dockerizado en un droplet de DigitalOcean) a un dominio distinto, además de un primer acercamiento a integrar un agente LLM con retrieval sobre datos reales del negocio en vez de tratar las "funciones de IA" como una caja negra.
